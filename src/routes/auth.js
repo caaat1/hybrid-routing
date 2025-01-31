@@ -1,6 +1,6 @@
 // src/routes/auth.js
 const express = require('express');
-const { authenticate } = require('../services/auth/mongoDB'); // Import the authentication service
+const { authenticate } = require('../services/auth/mongoDB');
 const router = express.Router();
 
 router.get('/login', (req, res) => {
@@ -12,8 +12,8 @@ router.post('/login', async (req, res) => {
     const result = await authenticate(username, password);
 
     if (result.success) {
-        req.session.user = result.user; // Save user info in session
-        res.redirect('/');
+        req.session.user = result.user;
+        res.redirect('/admin');
     } else {
         res.render('login', { title: 'Login', error: result.message });
     }

@@ -4,9 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 require('dotenv').config();
-
-// Import the db.js to set up the MongoDB connection
-const mongoose = require('./src/config/db'); // Ensure the path is correct
+const mongoose = require('./src/config/db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,15 +24,17 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }), // Use MongoDB URI from the .env file
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
 }));
 
 // Use the router modules
 const indexRouter = require('./src/routes/index');
 const authRouter = require('./src/routes/auth');
+const adminRouter = require('./src/routes/admin');
 app.use('/', indexRouter);
 app.use('/', authRouter);
+app.use('/admin', adminRouter);
 
 // Handle 404 - Keep this as the last middleware
 app.use((req, res, next) => {
