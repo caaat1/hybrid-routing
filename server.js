@@ -2,6 +2,8 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +17,14 @@ app.use(express.static(path.join(__dirname, 'src/public')));
 
 // Middleware to parse request body
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
+}));
 
 // Use the router modules
 const indexRouter = require('./src/routes/index');

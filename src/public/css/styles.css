@@ -1,7 +1,53 @@
+/* src/public/css/styles.css */
 body {
     font-family: Arial, sans-serif;
+    background-color: hsla(240, 11%, 15%, 1); /* Slightly lighter dark background */
+    color: hsla(0, 0%, 90%, 1); /* Less bright white text */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: hsla(240, 11%, 18%, 1); /* Slightly lighter dark background */
+    padding: 10px 0;
+    text-align: center;
 }
 
 header nav a {
+    color: hsla(0, 0%, 90%, 1); /* Less bright white text */
     margin-right: 10px;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    color: hsla(42, 100%, 50%, 1); /* Gold text */
+}
+
+main {
+    padding: 20px;
+}
+
+input {
+    background-color: hsla(0, 0%, 20%, 1); /* Dark background for input fields */
+    color: hsla(0, 0%, 90%, 1); /* Less bright white text for input fields */
+    border: 1px solid hsla(0, 0%, 40%, 1); /* Border color for input fields */
+    padding: 10px;
+    margin: 5px 0;
+}
+
+button {
+    background-color: hsla(42, 100%, 50%, 1); /* Gold background */
+    color: hsla(240, 11%, 15%, 1); /* Slightly lighter dark text */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: hsla(42, 100%, 45%, 1); /* Slightly darker gold background */
+}
+
+.error {
+    color: hsla(9, 100%, 64%, 1); /* Red text */
+    margin-bottom: 10px;
 }

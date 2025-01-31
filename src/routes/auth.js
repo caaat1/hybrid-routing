@@ -12,10 +12,21 @@ router.post('/login', async (req, res) => {
     const result = await authenticate(username, password);
 
     if (result.success) {
+        req.session.user = result.user; // Save user info in session
         res.redirect('/');
     } else {
         res.render('login', { title: 'Login', error: result.message });
     }
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('/');
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/login');
+    });
 });
 
 module.exports = router;
