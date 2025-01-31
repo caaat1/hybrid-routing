@@ -1,6 +1,6 @@
 // src/routes/auth.js
 const express = require('express');
-const { authenticate } = require('../services/auth/mock'); // Use the mock authentication service for testing
+const { authenticate } = require('../services/auth/mongoDB'); // Import the authentication service
 const router = express.Router();
 
 router.get('/login', (req, res) => {

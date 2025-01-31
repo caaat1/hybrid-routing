@@ -1,9 +1,12 @@
-// server.js
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 require('dotenv').config();
+
+// Import the db.js to set up the MongoDB connection
+const mongoose = require('./src/config/db'); // Ensure the path is correct
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +26,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }), // Use MongoDB URI from the .env file
     cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
 }));
 

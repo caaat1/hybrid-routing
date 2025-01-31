@@ -1,18 +1,27 @@
 // src\services\auth\mongoDB\index.js
-const bcrypt = require('bcrypt');
-const User = require('../models/User'); // Adjust the path as needed
+const User = require('./model/User'); // Import the User model
 
 async function authenticate(username, password) {
     try {
+        console.log(`Authenticating user: ${username}`);
         const user = await User.findOne({ username });
-        if (user && await bcrypt.compare(password, user.password)) {
-            return { success: true, user };
+        console.log('User found:', user);
+
+        if (user) {
+            const isMatch = await user.comparePassword(password);
+            console.log('Password match result:', isMatch);
+
+            if (isMatch) {
+                return { success: true, user };
+            } else {
+                return { success: false, message: 'Invalid credentials' };
+            }
         } else {
             return { success: false, message: 'Invalid credentials' };
         }
     } catch (err) {
-        console.error(err);
-        return { success: false, message: 'Something went wrong. Please try again.' };
+        console.error('Error during authentication:', err);
+        return { success: false, message: 'An error occurred during authentication' };
     }
 }
 
