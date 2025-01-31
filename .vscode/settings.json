@@ -1,0 +1,23 @@
+{
+  "cSpell.words": [
+    "aproba",
+    "arrayof",
+    "kgolov",
+    "mapbox",
+    "safehandler",
+    "sortkeybindings",
+    "Zerkalny"
+  ],
+  "files.exclude": {
+    "**/.git": false
+  },
+  "cSpell.ignoreWords": ["Zner", "nylsuxlvho"],
+  "cSpell.customDictionaries": {
+    "custom-dictionary-folder-basic": {
+      "name": "custom-dictionary-folder-basic",
+      "path": "${workspaceFolder:basic}/.cspell/custom-dictionary-folder-basic.txt",
+      "addWords": true,
+      "scope": "folder"
+    }
+  }
+}

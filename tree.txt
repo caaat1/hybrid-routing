@@ -1,0 +1,34 @@
+.
+|-- &stuff
+|-- README.md
+|-- cspell.json
+|-- db.js
+|-- eslint.config.js
+|-- models
+|   `-- User.js
+|-- package-lock.json
+|-- package.json
+|-- public
+|   |-- css
+|   |   `-- styles.css
+|   `-- js
+|       `-- main.js
+|-- routes
+|   |-- auth.js
+|   `-- index.js
+|-- server.js
+|-- test
+|-- tmp
+|-- tree.txt
+|-- views
+|   |-- 404.ejs
+|   |-- about.ejs
+|   |-- index.ejs
+|   |-- login
+|   |   `-- admin.ejs
+|   |-- login.ejs
+|   `-- partials
+|       `-- header.ejs
+`-- workspace.code-workspace
+
+11 directories, 20 files
