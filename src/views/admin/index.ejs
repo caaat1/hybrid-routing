@@ -1,4 +1,4 @@
-<!-- src\views\admin\index.ejs -->
+<!-- src/views/admin/index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +20,12 @@
     </header>
     <main class="admin-content">
         <h1>Welcome to Admin Dashboard</h1>
-        <!-- Add your admin content here -->
+        <div class="admin-actions">
+            <ul class="no-bullets">
+                <li><a href="/admin/products">View Products</a></li>
+                <li><a href="/admin/products/new">Add New Product</a></li>
+            </ul>
+        </div>
     </main>
 </body>
 </html>
