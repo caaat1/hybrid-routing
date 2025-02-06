@@ -1,4 +1,4 @@
-// src\services\auth\mongoDB\index.js
+// Relative path: "src\services\auth\mongoDB\index.js"
 const User = require('./model/User'); // Import the User model
 
 async function authenticate(username, password) {
