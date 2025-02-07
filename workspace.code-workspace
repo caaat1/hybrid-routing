@@ -8,7 +8,7 @@
     "files.autoSave": "afterDelay",
     "peacock.color": "#42b883",
     "window.commandCenter": true,
-    "window.title": "${remoteName}",
+    "window.title": "${activeRepositoryName}${separator}${activeRepositoryBranchName}",
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#65c89b",
       "activityBar.background": "#65c89b",
