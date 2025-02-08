@@ -19,16 +19,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to parse request body
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Session middleware
-app.use(session({
+app.use(
+  session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
-}));
+    store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
+    cookie: {maxAge: 24 * 60 * 60 * 1000}, // 1 day
+  }),
+);
 
 // Use the router modules
 const indexRouter = require('./routes/index');
@@ -40,10 +42,10 @@ app.use('/admin', adminRouter);
 
 // Handle 404 - Keep this as the last middleware
 app.use((req, res, next) => {
-    res.status(404).render('404', { title: 'Page Not Found' });
+  res.status(404).render('404', {title: 'Page Not Found'});
 });
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

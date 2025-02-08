@@ -1,13 +1,13 @@
 // src\services\auth\mock.js
 async function authenticate(username, password) {
-    // Define mock credentials
-    const mockUser = { username: 'user', password: 'pass' };
+  // Define mock credentials
+  const mockUser = {username: 'user', password: 'pass'};
 
-    if (username === mockUser.username && password === mockUser.password) {
-        return { success: true, user: mockUser };
-    } else {
-        return { success: false, message: 'Invalid credentials' };
-    }
+  if (username === mockUser.username && password === mockUser.password) {
+    return {success: true, user: mockUser};
+  } else {
+    return {success: false, message: 'Invalid credentials'};
+  }
 }
 
-module.exports = { authenticate };
+module.exports = {authenticate};
