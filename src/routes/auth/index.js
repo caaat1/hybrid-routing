@@ -1,7 +1,7 @@
-// src/routes/auth.js
+// src/routes/auth/index.js
 import {Router} from 'express';
 
-import authenticate from '../services/auth/mongoDB';
+import authenticate from '../../services/auth/mongoDB/index.js';
 
 export default Router()
   .get('/login', (req, res) => {

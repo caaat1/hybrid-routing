@@ -1,12 +1,12 @@
-// src/routes/admin.js
+// src/routes/admin/index.js
 import {Router} from 'express';
 
-import isAuthenticated from '../middleware/auth';
+import isAuthenticated from '../../middleware/auth/index.js';
 import Product, {
   find,
   findById,
   findByIdAndUpdate,
-} from '../models/mongoDB/Product';
+} from '../../models/mongoDB/Product.js';
 
 export default Router()
   .use(isAuthenticated)

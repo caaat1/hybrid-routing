@@ -1,21 +1,25 @@
 // src/app.js
 import {join} from 'path';
+import path from 'path';
+import {fileURLToPath} from 'url';
 
 import {urlencoded} from 'body-parser';
 import {create} from 'connect-mongo';
+import dotenv from 'dotenv';
 import express from 'express';
 import session from 'express-session';
 
 // Use the router modules
-import adminRouter from './routes/admin';
-import authRouter from './routes/auth';
-import indexRouter from './routes/index';
+import adminRouter from './routes/admin/index.js';
+import authRouter from './routes/auth/index.js';
+import indexRouter from './routes/index.js';
 
-require('dotenv').config();
-// import mongoose from './config/db';
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
+dotenv.config();
+// import mongoose from './config/db';
 
 // Set the view engine
 app.set('view engine', 'ejs');

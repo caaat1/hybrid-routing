@@ -1,4 +1,4 @@
-// src\services\auth\mock.js
+// src\services\auth\mock\index.js
 export default async function authenticate(username, password) {
   // Define mock credentials
   const mockUser = {username: 'user', password: 'pass'};

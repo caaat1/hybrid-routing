@@ -1,5 +1,5 @@
 // Relative path: "src\services\auth\mongoDB\index.js"
-import {findOne} from '../../../models/mongoDB/User'; // Import the User model
+import {findOne} from '../../../models/mongoDB/User.js'; // Import the User model
 
 export default async function authenticate(username, password) {
   try {

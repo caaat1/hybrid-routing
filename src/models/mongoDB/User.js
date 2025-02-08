@@ -1,4 +1,4 @@
-// src\services\auth\mongoDB\model\User.js
+// src\models\mongoDB\User.js
 import {hash, compare} from 'bcrypt';
 import {Schema, model} from 'mongoose';
 
