@@ -4,6 +4,7 @@ import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
+import globals from 'globals';
 
 export default [
   // Enforce ESLint's recommended rules for JavaScript
@@ -11,7 +12,7 @@ export default [
 
   // Enforce TypeScript ESLint's recommended rules
   {
-    files: ['**/*.js', '**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 'latest',
@@ -75,12 +76,7 @@ export default [
     // Set the Node.js environment
     languageOptions: {
       globals: {
-        node: true, // Enable Node.js global variables
-        require: true,
-        module: true,
-        process: true,
-        __dirname: true,
-        __filename: true,
+        ...globals.node,
       },
     },
     rules: {
