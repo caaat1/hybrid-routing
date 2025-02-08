@@ -1,4 +1,16 @@
 {
+  "cSpell.customDictionaries": {
+    "custom-dictionary-folder-basic": {
+      "addWords": true,
+      "name": "custom-dictionary-folder-basic",
+      "path": "${workspaceFolder:basic}/.cspell/custom-dictionary-folder-basic.txt",
+      "scope": "folder"
+    }
+  },
+  "cSpell.ignoreWords": [
+    "Zner",
+    "nylsuxlvho"
+  ],
   "cSpell.words": [
     "aproba",
     "arrayof",
@@ -10,14 +22,5 @@
   ],
   "files.exclude": {
     "**/.git": false
-  },
-  "cSpell.ignoreWords": ["Zner", "nylsuxlvho"],
-  "cSpell.customDictionaries": {
-    "custom-dictionary-folder-basic": {
-      "name": "custom-dictionary-folder-basic",
-      "path": "${workspaceFolder:basic}/.cspell/custom-dictionary-folder-basic.txt",
-      "addWords": true,
-      "scope": "folder"
-    }
   }
 }

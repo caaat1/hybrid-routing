@@ -1,16 +1,14 @@
 // Relative path: "src\services\auth\mongoDB\index.js"
-const User = require('./model/User'); // Import the User model
+import {findOne} from '../../../models/mongoDB/User'; // Import the User model
 
-async function authenticate(username, password) {
+export default async function authenticate(username, password) {
   try {
     console.log(`Authenticating user: ${username}`);
-    const user = await User.findOne({username});
+    const user = await findOne({username});
     console.log('User found:', user);
-
     if (user) {
       const isMatch = await user.comparePassword(password);
       console.log('Password match result:', isMatch);
-
       if (isMatch) {
         return {success: true, user};
       } else {
@@ -24,5 +22,3 @@ async function authenticate(username, password) {
     return {success: false, message: 'An error occurred during authentication'};
   }
 }
-
-module.exports = {authenticate};

@@ -1,23 +1,26 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
+// server.js
+import {join} from 'path';
+
+import {urlencoded} from 'body-parser';
+import {create} from 'connect-mongo';
+import express from 'express';
+import session from 'express-session';
+
 require('dotenv').config();
-const mongoose = require('./src/config/db');
+// import mongoose from './src/config/db';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Set the view engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src/views'));
+app.set('views', join(__dirname, 'src/views'));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'src/public')));
+app.use(express.static(join(__dirname, 'src/public')));
 
 // Middleware to parse request body
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(urlencoded({extended: true}));
 
 // Session middleware
 app.use(
@@ -25,21 +28,22 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
+    store: create({mongoUrl: process.env.MONGO_URI}),
     cookie: {maxAge: 24 * 60 * 60 * 1000}, // 1 day
   }),
 );
 
 // Use the router modules
-const indexRouter = require('./src/routes/index');
-const authRouter = require('./src/routes/auth');
-const adminRouter = require('./src/routes/admin');
+import adminRouter from './src/routes/admin';
+import authRouter from './src/routes/auth';
+import indexRouter from './src/routes/index';
+
 app.use('/', indexRouter);
 app.use('/', authRouter);
 app.use('/admin', adminRouter);
 
 // Handle 404 - Keep this as the last middleware
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).render('404', {title: 'Page Not Found'});
 });
 

@@ -56,7 +56,16 @@ export default [
         },
       ],
       // Ensure consistent use of file extensions in imports
-      'import/extensions': ['error', 'ignorePackages'],
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          js: 'never',
+          jsx: 'never',
+        },
+      ],
+      // Enforce an empty line after imports
+      'import/newline-after-import': ['error', {count: 1}], // Enforce exactly one empty line,
     },
   },
 
@@ -76,6 +85,7 @@ export default [
     // Set the Node.js environment
     languageOptions: {
       globals: {
+        ...globals.browser,
         ...globals.node,
       },
     },

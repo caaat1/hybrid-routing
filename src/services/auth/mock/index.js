@@ -1,5 +1,5 @@
 // src\services\auth\mock.js
-async function authenticate(username, password) {
+export default async function authenticate(username, password) {
   // Define mock credentials
   const mockUser = {username: 'user', password: 'pass'};
 
@@ -9,5 +9,3 @@ async function authenticate(username, password) {
     return {success: false, message: 'Invalid credentials'};
   }
 }
-
-module.exports = {authenticate};
