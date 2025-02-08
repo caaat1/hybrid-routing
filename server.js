@@ -1,5 +1,5 @@
 import app from './src/app.js';
-import {connectToDatabase} from './src/config/db.js'; // Ensure this is a function that connects to the DB
+import connectToDatabase from './src/config/db.js'; // Ensure this is a function that connects to the DB
 
 const PORT = process.env.PORT || 3000;
 

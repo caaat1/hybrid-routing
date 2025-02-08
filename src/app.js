@@ -1,4 +1,3 @@
-// src/app.js
 import {join} from 'path';
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -9,21 +8,14 @@ import dotenv from 'dotenv';
 import express from 'express';
 import session from 'express-session';
 
-// Use the router modules
-import {connectToDatabase} from './config/db.js'; // Import the database connection function
 import adminRouter from './routes/admin/index.js';
 import authRouter from './routes/auth/index.js';
 import indexRouter from './routes/index.js';
 
+dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-dotenv.config();
-
-// Connect to MongoDB
-connectToDatabase(); // Call the function to connect to the database
 
 // Set the view engine
 app.set('view engine', 'ejs');
@@ -55,7 +47,4 @@ app.use((req, res) => {
   res.status(404).render('404', {title: 'Page Not Found'});
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+export default app;

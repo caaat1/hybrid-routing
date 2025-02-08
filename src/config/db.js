@@ -1,23 +1,19 @@
-// src/config/db.js
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
 dotenv.config();
 
-const mongoURI = process.env.MONGO_URI;
-
-// A function that connects to the database
-export const connectToDatabase = async () => {
+// Function to connect to the database
+export default async () => {
   try {
+    const mongoURI = process.env.MONGO_URI;
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log('MongoDB connected successfully');
-  } catch (err) {
-    console.error('MongoDB connection error:', err);
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1); // Exit the process in case of connection failure
   }
 };
-
-// Export mongoose to use in other files if needed (for models, etc.)
-export default mongoose;
