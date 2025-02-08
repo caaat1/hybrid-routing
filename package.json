@@ -12,6 +12,7 @@
   },
   "description": "This is a hybrid web app that combines server-side rendering with client-side routing.",
   "devDependencies": {
+    "@types/node": "^22.13.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
     "eslint": "^8.57.1",

@@ -2,11 +2,7 @@
 import {Router} from 'express';
 
 import isAuthenticated from '../../middleware/auth/index.js';
-import Product, {
-  find,
-  findById,
-  findByIdAndUpdate,
-} from '../../models/mongoDB/Product.js';
+import Product from '../../models/mongoDB/Product.js';
 
 export default Router()
   .use(isAuthenticated)
@@ -15,7 +11,7 @@ export default Router()
   })
   .get('/products', async (req, res) => {
     try {
-      const products = await find();
+      const products = await Product.find();
       res.render('admin/products', {products});
     } catch (err) {
       res.status(500).send('Server Error');
@@ -36,7 +32,7 @@ export default Router()
   })
   .get('/products/:id/edit', async (req, res) => {
     try {
-      const product = await findById(req.params.id);
+      const product = await Product.findById(req.params.id);
       res.render('admin/edit-product', {product});
     } catch (err) {
       res.status(500).send('Server Error');
@@ -45,7 +41,11 @@ export default Router()
   .post('/products/:id', async (req, res) => {
     try {
       const {name, description, price} = req.body;
-      await findByIdAndUpdate(req.params.id, {name, description, price});
+      await Product.findByIdAndUpdate(req.params.id, {
+        name,
+        description,
+        price,
+      });
       res.redirect('/admin/products');
     } catch (err) {
       res.status(500).send('Server Error');
