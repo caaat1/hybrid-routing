@@ -11,9 +11,11 @@ export default [
 
   // Enforce TypeScript ESLint's recommended rules
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.js', '**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
     plugins: {
       '@typescript-eslint': ts,
@@ -70,6 +72,17 @@ export default [
 
   // Additional project-specific rules
   {
+    // Set the Node.js environment
+    languageOptions: {
+      globals: {
+        node: true, // Enable Node.js global variables
+        require: true,
+        module: true,
+        process: true,
+        __dirname: true,
+        __filename: true,
+      },
+    },
     rules: {
       // Enforce consistent arrow function syntax
       'arrow-body-style': ['error', 'as-needed'],
