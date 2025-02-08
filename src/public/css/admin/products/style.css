@@ -1,0 +1,7 @@
+[data-xpath^="body/main/div"]:not([data-xpath*="]/div"]) {
+    border-width: .25em;
+    border-color: hsla(0, 100%, 50%, 0.5);
+    border-style: solid;
+    padding: 0.5em;
+    margin: 1em;
+}
