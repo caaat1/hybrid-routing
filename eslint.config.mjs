@@ -1,6 +1,4 @@
 import js from '@eslint/js';
-// import ts from '@typescript-eslint/eslint-plugin';
-// import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -9,26 +7,6 @@ import globals from 'globals';
 export default [
   // Enforce ESLint's recommended rules for JavaScript
   js.configs.recommended,
-
-  // Enforce TypeScript ESLint's recommended rules
-  // {
-  //   files: ['**/*.ts', '**/*.tsx'],
-  //   languageOptions: {
-  //     parser: tsParser,
-  //     ecmaVersion: 'latest',
-  //     sourceType: 'module',
-  //   },
-  //   plugins: {
-  //     '@typescript-eslint': ts,
-  //   },
-  //   rules: {
-  //     ...ts.configs.recommended.rules,
-  //     // Additional TypeScript rules
-  //     '@typescript-eslint/no-unused-vars': 'warn',
-  //     '@typescript-eslint/explicit-function-return-type': 'off',
-  //     '@typescript-eslint/no-explicit-any': 'warn',
-  //   },
-  // },
 
   // Import sorting and organization
   {
@@ -64,8 +42,6 @@ export default [
           mjs: 'always',
           cjs: 'always',
           jsx: 'always',
-          ts: 'always',
-          tsx: 'always',
         },
       ],
       // Flag unresolved imports
@@ -88,7 +64,6 @@ export default [
 
   // Additional project-specific rules
   {
-    // Set the Node.js environment
     languageOptions: {
       globals: {
         ...globals.browser,
