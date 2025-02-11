@@ -1,7 +1,38 @@
+[data-xpath='body/main'] {
+  background: #089;
+  border-radius: 5px;
+  margin: auto;
+  padding: 1em;
+  width: 50vw;
+}
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']) {
-  border-width: 0.25em;
-  border-color: hsla(0, 100%, 50%, 0.5);
-  border-style: solid;
-  padding: 0.5em;
+  background: #eee;
+  border: 1px solid #079;
+  border-radius: 2px;
+  cursor: pointer;
   margin: 1em;
+  padding: 1em;
+  position: relative;
+  text-align: center;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']):hover {
+  background: #ffc;
+}
+.animated {
+  transition-property: left, top;
+  transition-duration: 1s;
+}
+.is-being-dragged,
+.is-being-dragged:hover {
+  background: #0ef;
+  cursor: auto;
+}
+.moving,
+.moving:hover {
+  background: #fdd;
+  cursor: auto;
+}
+.grabbed:hover {
+  background: #cdf;
+  cursor: move;
 }

@@ -3,36 +3,36 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Products</title>
-    <link rel="stylesheet" href="/css/admin/styles.css">
-    <link rel="stylesheet" href="/css/admin/products/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Products</title>
+  <link rel="stylesheet" href="/css/admin/styles.css">
+  <link rel="stylesheet" href="/css/admin/products/style.css">
 </head>
 
 <body>
-    <%- include('../partials/admin-header'); %>
-        <main class="admin-content">
-            <h1>Products</h1>
-            <a href="/admin/products/new">Add New Product</a>
-            <% products.forEach((product, index)=> { %>
-                <div data-xpath="body/main/div[<%= index + 1 %>]">
-                    <div data-xpath="body/main/div[<%= index + 1 %>]/div[1]">
-                        <%= product.name %>
-                    </div>
-                    <div data-xpath="body/main/div[<%= index + 1 %>]/div[2]">
-                        <%= product.description %>
-                    </div>
-                    <div data-xpath="body/main/div[<%= index + 1 %>]/div[3]">
-                        <%= product.price %>
-                    </div>
-                    <div data-xpath="body/main/div[<%= index + 1 %>]/div[4]/a">
-                        <a href="/admin/products/<%= product._id %>/edit">Edit</a>
-                    </div>
-                </div>
-                <% }) %>
-        </main>
-        <script src="/js/admin/products/script.js"></script>
+  <%- include('../partials/admin-header'); %>
+  <main class="admin-content" data-xpath="body/main">
+<!--     <h1>Products</h1>
+    <a href="/admin/products/new">Add New Product</a>
+ -->    <% products.forEach((product, index)=> { %>
+    <div data-xpath="body/main/div[<%= index + 1 %>]">
+      <div data-xpath="body/main/div[<%= index + 1 %>]/div[1]">
+        <%= product.name %>
+      </div>
+      <div data-xpath="body/main/div[<%= index + 1 %>]/div[2]">
+        <%= product.description %>
+      </div>
+      <div data-xpath="body/main/div[<%= index + 1 %>]/div[3]">
+        <%= product.price %>
+      </div>
+      <div data-xpath="body/main/div[<%= index + 1 %>]/div[4]/a">
+        <a href="/admin/products/<%= product._id %>/edit">Edit</a>
+      </div>
+    </div>
+    <% }) %>
+  </main>
+  <script src="/js/admin/products/script.js"></script>
 </body>
 
 </html>

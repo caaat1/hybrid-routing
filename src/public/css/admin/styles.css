@@ -41,7 +41,7 @@ header.admin-header nav.admin-nav ul.no-bullets li {
 }
 
 header.admin-header nav.admin-nav a {
-  color: hsla(0, 0%, 90%, 1); /* Less bright white text */
+  color: hsla(0, 0%, 90%, 1); /* Less bright white-text */
   text-decoration: none;
   padding: 5px 10px;
   transition:
@@ -56,7 +56,7 @@ header.admin-header nav.admin-nav a {
 }
 
 header.admin-header nav.admin-nav a:hover {
-  background-color: hsla(42, 100%, 50%, 1); /* Gold background */
+  background-color: hsla(42, 100%, 50%, 1); /* Gold-background */
 }
 
 /* Main Content */
@@ -67,14 +67,14 @@ main.admin-content {
 /* Form Styles */
 form.admin-form input {
   background-color: hsla(0, 0%, 20%, 1); /* Dark background for input fields */
-  color: hsla(0, 0%, 90%, 1); /* Less bright white text for input fields */
+  color: hsla(0, 0%, 90%, 1); /* Less bright white-text for input fields */
   border: 1px solid hsla(0, 0%, 40%, 1); /* Border color for input fields */
   padding: 10px;
   margin: 5px 0;
 }
 
 form.admin-form button {
-  background-color: hsla(42, 100%, 50%, 1); /* Gold background */
+  background-color: hsla(42, 100%, 50%, 1); /* Gold-background */
   color: hsla(240, 11%, 15%, 1); /* Slightly lighter dark text */
   border: none;
   padding: 10px 20px;
@@ -87,12 +87,12 @@ form.admin-form button:hover {
     100%,
     45%,
     1
-  ); /* Slightly darker gold background */
+  ); /* Slightly darker gold-background */
 }
 
 /* Error Message */
 .admin-error {
-  color: hsla(9, 100%, 64%, 1); /* Red text */
+  color: hsla(9, 100%, 64%, 1); /* Red-text */
   margin-bottom: 10px;
 }
 

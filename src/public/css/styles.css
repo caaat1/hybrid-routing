@@ -1,27 +1,23 @@
 /* src/public/css/styles.css */
 
 /* Global Styles */
+* {
+  user-select: none;
+}
 body {
   font-family: Arial, sans-serif;
-  background-color: hsla(
-    240,
-    11%,
-    15%,
-    1
-  ); /* Slightly lighter dark background */
-  color: hsla(0, 0%, 90%, 1); /* Less bright white text */
+  background-color: hsla(240, 11%, 15%, 1);
+  /* Slightly lighter dark background */
+  color: hsla(0, 0%, 90%, 1);
+  /* Less bright white-text */
   margin: 0;
   padding: 0;
 }
 
 /* Header Styles */
 header.public-header {
-  background-color: hsla(
-    240,
-    11%,
-    18%,
-    1
-  ); /* Slightly lighter dark background */
+  background-color: hsla(240, 11%, 18%, 1);
+  /* Slightly lighter dark background */
   padding: 10px 0;
   text-align: center;
 }
@@ -29,13 +25,15 @@ header.public-header {
 header.public-header nav.public-nav {
   display: flex;
   justify-content: space-around;
-  background: hsla(240, 11%, 20%, 1); /* Darker background */
+  background: hsla(240, 11%, 20%, 1);
+  /* Darker background */
   color: hsla(0, 0%, 90%, 1);
   padding: 10px;
 }
 
 header.public-header nav.public-nav ul.no-bullets {
-  list-style-type: none; /* Remove bullets */
+  list-style-type: none;
+  /* Remove bullets */
   padding: 0;
   margin: 0;
   display: flex;
@@ -46,7 +44,8 @@ header.public-header nav.public-nav ul.no-bullets li {
 }
 
 header.public-header nav.public-nav a {
-  color: hsla(0, 0%, 90%, 1); /* Less bright white text */
+  color: hsla(0, 0%, 90%, 1);
+  /* Less bright white-text */
   text-decoration: none;
   padding: 5px 10px;
   transition:
@@ -57,11 +56,13 @@ header.public-header nav.public-nav a {
     background-repeat 0.3s,
     background-attachment 0.3s,
     background-clip 0.3s,
-    background-origin 0.3s; /* Expanded background shorthand */
+    background-origin 0.3s;
+  /* Expanded background shorthand */
 }
 
 header.public-header nav.public-nav a:hover {
-  background-color: hsla(42, 100%, 50%, 1); /* Gold background */
+  background-color: hsla(42, 100%, 50%, 1);
+  /* Gold-background */
 }
 
 /* Main Content Styles */
@@ -71,32 +72,34 @@ main {
 
 /* Form Styles */
 input {
-  background-color: hsla(0, 0%, 20%, 1); /* Dark background for input fields */
-  color: hsla(0, 0%, 90%, 1); /* Less bright white text for input fields */
-  border: 1px solid hsla(0, 0%, 40%, 1); /* Border color for input fields */
+  background-color: hsla(0, 0%, 20%, 1);
+  /* Dark background for input fields */
+  color: hsla(0, 0%, 90%, 1);
+  /* Less bright white-text for input fields */
+  border: 1px solid hsla(0, 0%, 40%, 1);
+  /* Border color for input fields */
   padding: 10px;
   margin: 5px 0;
 }
 
 button {
-  background-color: hsla(42, 100%, 50%, 1); /* Gold background */
-  color: hsla(240, 11%, 15%, 1); /* Slightly lighter dark text */
+  background-color: hsla(42, 100%, 50%, 1);
+  /* Gold-background */
+  color: hsla(240, 11%, 15%, 1);
+  /* Slightly lighter dark text */
   border: none;
   padding: 10px 20px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: hsla(
-    42,
-    100%,
-    45%,
-    1
-  ); /* Slightly darker gold background */
+  background-color: hsla(42, 100%, 45%, 1);
+  /* Slightly darker gold-background */
 }
 
 /* Error Message */
 .error {
-  color: hsla(9, 100%, 64%, 1); /* Red text */
+  color: hsla(9, 100%, 64%, 1);
+  /* Red-text */
   margin-bottom: 10px;
 }
