@@ -1,155 +1,142 @@
 (function () {
   const CSSClass = {
-    anim: 'animated',
-    bD: 'is-being-dragged',
-    mD: 'grabbed',
-    mv: 'moving',
+    animated: 'animated',
+    dragged: 'dragged',
+    grabbed: 'grabbed',
+    moving: 'moving',
+    released: 'released',
   };
   const dragTolerance = 4;
-  const eventName = {
-    mouseDown: 'mousedown',
-    mouseMove: 'mousemove',
-    mouseUp: 'mouseup',
-    transitionEnd: 'transitionend',
-  };
   const list = document.querySelector('[data-xpath="body/main"]');
   const listItems = list.querySelectorAll(
     '[data-xpath^="body/main/div"]:not([data-xpath*="]/div"])',
   );
-  const mouseStartProperty = {
-    name: 'mouseStart',
-    definition: {
-      value: {x: undefined, y: undefined},
-      writable: false, // Prevent reassignment but allow modifications inside
-      enumerable: false, // Hide from `Object.keys()`
-      configurable: false, // Prevent deletion or reconfiguration
-    },
-  };
   const px = 'px';
-  const tmOut = 1000;
+  const tmOut = 1e3;
   const wGCS = window.getComputedStyle;
   const zIndBase = 0;
   let zInd = 0;
 
-  listItems.forEach((item) => {
-    if (undefined === item.property) {
-      Object.defineProperty(item, 'property', {
-        value: {},
-        writable: false, // Prevent reassignment but allow modifications inside
-        enumerable: false, // Hide from `Object.keys()`
-        configurable: false, // Prevent deletion or reconfiguration
-      });
-    }
-    item.property.isTransitionEnded = true;
-    item.classList.add(CSSClass.anim);
-    item.addEventListener(eventName.transitionEnd, () => {
-      item.property.isTransitionEnded = true;
-      item.style.removeProperty('top');
-      item.classList.remove(CSSClass.bD, CSSClass.mv);
-    });
-
-    item.property.eventHandler = {
-      mouseMove: (e) => {
-        if (item.property.isBeingDragged) {
-          [0, 2].forEach((value, index) => {
-            let adjacentItems = [
-              item.previousElementSibling,
-              item,
-              item.nextElementSibling,
-            ];
-            let sibling = adjacentItems[value];
-            if (sibling) {
-              let isNextNeighborOverlapped =
-                adjacentItems[index].offsetTop +
-                  adjacentItems[index].offsetHeight / 2 >
-                adjacentItems[index + 1].offsetTop +
-                  adjacentItems[index + 1].offsetHeight / 2;
-              if (
-                isNextNeighborOverlapped &&
-                sibling.property.isTransitionEnded
-              ) {
-                const oHmT = (el) =>
-                  (value - 1) *
-                  (el.offsetHeight + parseFloat(wGCS(el).marginTop));
-                list.insertBefore(
-                  adjacentItems[index + 1],
-                  adjacentItems[index],
-                );
-                sibling.style.top = oHmT(item) + px;
-                sibling.classList.add(CSSClass.mv);
-                sibling.property.isTransitionEnded = false;
-                item.property.mouseStart.y += oHmT(sibling);
-                sibling.style.top = 0;
+  class CustomProperties /*  extends Element */ {
+    el;
+    isBeingDragged = false;
+    isTransitionEnded = true;
+    eventListener = {
+      mouseDown: [
+        'mousedown',
+        (e) => {
+          let isGrabbed = this.isTransitionEnded && e.which < 2;
+          if (isGrabbed) {
+            this.el.classList.add(CSSClass.grabbed);
+            document.addEventListener(...this.eventListener.mouseMove);
+            document.addEventListener(...this.eventListener.mouseUp);
+          }
+        },
+      ],
+      mouseMove: [
+        'mousemove',
+        (e) => {
+          if (this.isBeingDragged) {
+            [-1, 1].forEach((sign, index) => {
+              let elTrio = [
+                this.el.previousElementSibling,
+                this.el,
+                this.el.nextElementSibling,
+              ];
+              let sibling = elTrio[sign + 1];
+              if (sibling) {
+                let isNextElSurpassed =
+                  elTrio[index]._.getOffsetCenterY() >
+                  elTrio[index + 1]._.getOffsetCenterY();
+                if (isNextElSurpassed && sibling._.isTransitionEnded) {
+                  list.insertBefore(elTrio[index + 1], elTrio[index]);
+                  sibling.style.top = `${sign * this.getOffsetHeightMarginTop()}${px}`;
+                  sibling.classList.add(CSSClass.moving);
+                  sibling._.isTransitionEnded = false;
+                  this.refPoint.y +=
+                    sign * sibling._.getOffsetHeightMarginTop();
+                  sibling.style.top = 0;
+                }
               }
+            });
+            this.el.style.left = `${e.pageX - this.refPoint.x}${px}`;
+            this.el.style.top = `${e.pageY - this.refPoint.y}${px}`;
+          } else {
+            this.refPoint.x || (this.refPoint.x = e.pageX);
+            this.refPoint.y || (this.refPoint.y = e.pageY);
+            this.isBeingDragged =
+              Math.abs(e.pageX - this.refPoint.x) +
+                Math.abs(e.pageY - this.refPoint.y) >
+              dragTolerance;
+            if (this.isBeingDragged) {
+              this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+              this.el.classList.add(CSSClass.dragged);
+              zInd++;
+              this.el.style.zIndex = zInd;
             }
-          });
-          item.style.left = `${e.pageX - item.property.mouseStart.x}${px}`;
-          item.style.top = `${e.pageY - item.property.mouseStart.y}${px}`;
-        } else {
-          if (undefined === item.property.mouseStart) {
-            Object.defineProperty(
-              item.property,
-              mouseStartProperty.name,
-              mouseStartProperty.definition,
-            );
-            item.property.mouseStart.x = e.pageX;
-            item.property.mouseStart.y = e.pageY;
           }
-          item.property.isBeingDragged =
-            Math.abs(e.pageX - item.property.mouseStart.x) +
-              Math.abs(e.pageY - item.property.mouseStart.y) >
-            dragTolerance;
-          if (item.property.isBeingDragged) {
-            item.classList.remove(CSSClass.anim);
-            zInd++;
-            item.style.zIndex = zInd;
-          }
-        }
-      },
-      mouseUp: () => {
-        setTimeout(() => {
-          if (item.property.isBeingDragged) {
-            item.classList.add(CSSClass.anim, CSSClass.bD);
-            setTimeout(() => {
-              listItems.forEach(
-                (item) =>
-                  (item.style.zIndex =
-                    wGCS(item).zIndex - (wGCS(item).zIndex > zIndBase)),
+        },
+      ],
+      mouseUp: [
+        'mouseup',
+        () => {
+          setTimeout(() => {
+            if (this.isBeingDragged) {
+              this.el.classList.remove(CSSClass.dragged);
+              this.el.classList.add(
+                CSSClass.animated,
+                CSSClass.moving,
+                CSSClass.released,
               );
-              zInd -= +(zInd > zIndBase);
-            }, tmOut);
-            item.style.top = 0;
-            item.property.isTransitionEnded = false;
-          }
-          item.classList.remove(CSSClass.mD);
-          item.property.isBeingDragged = false;
-          delete item.property.mouseStart;
-          item.style.left = 0;
-        }, 10);
-        document.removeEventListener(
-          eventName.mouseMove,
-          item.property.eventHandler.mouseMove,
-        );
-        document.removeEventListener(
-          eventName.mouseUp,
-          item.property.eventHandler.mouseUp,
-        );
-      },
+              setTimeout(() => {
+                listItems.forEach(
+                  (el) =>
+                    (el.style.zIndex =
+                      wGCS(el).zIndex - (wGCS(el).zIndex > zIndBase)),
+                );
+                zInd -= zInd > zIndBase;
+              }, tmOut);
+              this.el.style.top = 0;
+              this.isTransitionEnded = false;
+            }
+            this.el.classList.remove(CSSClass.grabbed);
+            this.isBeingDragged = false;
+            this.refPoint.x = undefined;
+            this.refPoint.y = undefined;
+            this.el.style.left = 0;
+          }, 10);
+          document.removeEventListener(...this.eventListener.mouseMove);
+          document.removeEventListener(...this.eventListener.mouseUp);
+        },
+      ],
+      transitionEnd: [
+        'transitionend',
+        () => {
+          this.isTransitionEnded = true;
+          this.el.style.removeProperty('top');
+          this.el.classList.remove(CSSClass.moving, CSSClass.released);
+        },
+      ],
     };
-    item.addEventListener(eventName.mouseDown, (e) => {
-      let isGrabbed = item.property.isTransitionEnded && e.which < 2;
-      if (isGrabbed) {
-        item.classList.add(CSSClass.mD);
-        document.addEventListener(
-          eventName.mouseMove,
-          item.property.eventHandler.mouseMove,
-        );
-        document.addEventListener(
-          eventName.mouseUp,
-          item.property.eventHandler.mouseUp,
-        );
-      }
-    });
+    refPoint = {
+      x: undefined,
+      y: undefined,
+    };
+    constructor(el) {
+      this.el = el;
+    }
+    getOffsetCenterY() {
+      return this.el.offsetTop + this.el.offsetHeight / 2;
+    }
+    getOffsetHeightMarginTop() {
+      return this.el.offsetHeight + parseFloat(wGCS(this.el).marginTop);
+    }
+  }
+  listItems.forEach((el) => {
+    el.classList.add(CSSClass.animated);
+    el._ = new CustomProperties(el);
+    el.addEventListener(...el._.eventListener.transitionEnd);
+    el.addEventListener(...el._.eventListener.mouseDown);
   });
   document.oncontextmenu = (e) => e.preventDefault();
 })();

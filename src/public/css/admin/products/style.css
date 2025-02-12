@@ -1,14 +1,16 @@
 [data-xpath='body/main'] {
-  background: #089;
-  border-radius: 5px;
+  background-color: hsl(192, 100%, 30%, 0.5);
+  border-radius: 0.5em;
   margin: auto;
   padding: 1em;
   width: 50vw;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']) {
-  background: #eee;
-  border: 1px solid #079;
-  border-radius: 2px;
+  background-color: hsl(0, 0%, 93%, 0.5);
+  border-color: hsl(192, 100%, 30%, 0.75);
+  border-radius: 0.25em;
+  border-style: solid;
+  border-width: 1px;
   cursor: pointer;
   margin: 1em;
   padding: 1em;
@@ -16,23 +18,23 @@
   text-align: center;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']):hover {
-  background: #ffc;
+  background: hsl(60, 100%, 90%, 0.5);
 }
-.animated {
-  transition-property: left, top;
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).animated {
   transition-duration: 1s;
+  transition-property: left, top;
 }
-.is-being-dragged,
-.is-being-dragged:hover {
-  background: #0ef;
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged:hover {
+  background: hsl(192, 100%, 50%, 0.5);
   cursor: auto;
 }
-.moving,
-.moving:hover {
-  background: #fdd;
-  cursor: auto;
-}
-.grabbed:hover {
-  background: #cdf;
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).grabbed:hover {
+  background: hsl(220, 100%, 90%, 0.5);
   cursor: move;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).moving,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).moving:hover {
+  background: hsla(0, 50%, 50%, 0.5);
+  cursor: auto;
 }
