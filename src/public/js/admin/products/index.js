@@ -1,4 +1,8 @@
+import pixels from './pixels/index.js';
+import RefPoint from './RefPoint/index.js';
+
 (function () {
+  'use strict';
   const CSSClass = {
     animated: 'animated',
     dragged: 'dragged',
@@ -17,7 +21,7 @@
   const zIndBase = 0;
   let zInd = 0;
 
-  class CustomProperties /*  extends Element */ {
+  class CustomProperties {
     el;
     isBeingDragged = false;
     isTransitionEnded = true;
@@ -30,6 +34,7 @@
             this.el.classList.add(CSSClass.grabbed);
             document.addEventListener(...this.eventListener.mouseMove);
             document.addEventListener(...this.eventListener.mouseUp);
+            this.refPoint = new RefPoint(e.pageX, e.pageY);
           }
         },
       ],
@@ -59,14 +64,12 @@
                 }
               }
             });
-            this.el.style.left = `${e.pageX - this.refPoint.x}${px}`;
-            this.el.style.top = `${e.pageY - this.refPoint.y}${px}`;
+            this.el.style.left = pixels(this.refPoint.getDelta(e).x);
+            this.el.style.top = pixels(this.refPoint.getDelta(e).y);
           } else {
-            this.refPoint.x || (this.refPoint.x = e.pageX);
-            this.refPoint.y || (this.refPoint.y = e.pageY);
             this.isBeingDragged =
-              Math.abs(e.pageX - this.refPoint.x) +
-                Math.abs(e.pageY - this.refPoint.y) >
+              Math.abs(this.refPoint.getDelta(e).x) +
+                Math.abs(this.refPoint.getDelta(e).y) >
               dragTolerance;
             if (this.isBeingDragged) {
               this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
@@ -101,8 +104,6 @@
             }
             this.el.classList.remove(CSSClass.grabbed);
             this.isBeingDragged = false;
-            this.refPoint.x = undefined;
-            this.refPoint.y = undefined;
             this.el.style.left = 0;
           }, 10);
           document.removeEventListener(...this.eventListener.mouseMove);
@@ -118,10 +119,6 @@
         },
       ],
     };
-    refPoint = {
-      x: undefined,
-      y: undefined,
-    };
     constructor(el) {
       this.el = el;
     }
@@ -130,6 +127,13 @@
     }
     getOffsetHeightMarginTop() {
       return this.el.offsetHeight + parseFloat(wGCS(this.el).marginTop);
+    }
+    addEventListener(type) {
+      const listener = this.eventListener[type];
+      if (listener) {
+        this.el.addEventListener(type, this.eventListener[type]);
+      }
+      return this;
     }
   }
   listItems.forEach((el) => {
