@@ -56,11 +56,11 @@ import RefPoint from './RefPoint/index.js';
         mousemove: [
           'mousemove',
           (e) => {
-            const delta = this.refPoint.getDelta(e);
+            this.refPoint.setDelta(e);
             if (this.isBeingDragged) {
-              this.handleDragReorder(delta);
+              this.handleDragReorder();
             }
-            this.isBeingDragged = this.isDragToleranceExceeded(delta);
+            this.isBeingDragged = this.isDragToleranceExceeded();
             if (this.isBeingDragged) {
               this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
               this.el.classList.add(CSSClass.dragged);
@@ -121,7 +121,7 @@ import RefPoint from './RefPoint/index.js';
     //   }
     //   this.el.style.zIndex = this.zIndex;
     // }
-    handleDragReorder(delta) {
+    handleDragReorder() {
       [-1, 1].forEach((sign, index) => {
         let elTrio = [
           this.el.previousElementSibling,
@@ -143,7 +143,7 @@ import RefPoint from './RefPoint/index.js';
           }
         }
       });
-      this.updateOffset(delta);
+      this.updateOffset();
     }
     // incrementZIndex() {
     //   if (this.zIndex == 'auto') {
@@ -167,10 +167,9 @@ import RefPoint from './RefPoint/index.js';
     //   }
     //   return this._isBeingDragged;
     // }
-    isDragToleranceExceeded(delta) {
+    isDragToleranceExceeded() {
       return (
-        Math.abs(/* this.refPoint. */ delta.x) +
-          Math.abs(/* this.refPoint. */ delta.y) >
+        Math.abs(this.refPoint.delta.x) + Math.abs(this.refPoint.delta.y) >
         dragTolerance
       );
     }
@@ -181,9 +180,9 @@ import RefPoint from './RefPoint/index.js';
       this.el.style.top = 0;
       this.el.style.left = 0;
     }
-    updateOffset(delta) {
-      this.el.style.left = pixels(/* this.refPoint. */ delta.x);
-      this.el.style.top = pixels(/* this.refPoint. */ delta.y);
+    updateOffset() {
+      this.el.style.left = pixels(this.refPoint.delta.x);
+      this.el.style.top = pixels(this.refPoint.delta.y);
     }
     updateZIndexAll() {
       setTimeout(() => {
