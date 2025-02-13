@@ -26,15 +26,21 @@
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged,
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged:hover {
-  background: hsl(192, 100%, 50%, 0.5);
-  cursor: auto;
+  background: hsl(192, 100%, 50%, 0.99);
+  cursor: move;
+  pointer-events: none;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).grabbed:hover {
-  background: hsl(220, 100%, 90%, 0.5);
+  background: hsl(220, 100%, 90%, 0.99);
   cursor: move;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).moving,
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).moving:hover {
   background: hsla(0, 50%, 50%, 0.5);
+  cursor: auto;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).released,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).released:hover {
+  background: hsla(30, 50%, 50%, 0.5);
   cursor: auto;
 }

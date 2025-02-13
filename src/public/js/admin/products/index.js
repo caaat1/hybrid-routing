@@ -18,11 +18,15 @@ import RefPoint from './RefPoint/index.js';
   const px = 'px';
   const tmOut = 1e3;
   const wGCS = window.getComputedStyle;
-  const zIndBase = 0;
-  let zInd = 0;
+
+  const zIndexBase = 0;
+  let zIndex = 0;
 
   class CustomProperties {
     el;
+    zIndex;
+    zIndexBase;
+    zIndexIncrement = 1;
     isBeingDragged = false;
     isTransitionEnded = true;
     eventListener = {
@@ -64,19 +68,19 @@ import RefPoint from './RefPoint/index.js';
                 }
               }
             });
-            this.el.style.left = pixels(this.refPoint.getDelta(e).x);
-            this.el.style.top = pixels(this.refPoint.getDelta(e).y);
-          } else {
-            this.isBeingDragged =
-              Math.abs(this.refPoint.getDelta(e).x) +
-                Math.abs(this.refPoint.getDelta(e).y) >
-              dragTolerance;
-            if (this.isBeingDragged) {
-              this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
-              this.el.classList.add(CSSClass.dragged);
-              zInd++;
-              this.el.style.zIndex = zInd;
-            }
+            const delta = this.refPoint.getDelta(e);
+            this.el.style.left = pixels(delta.x);
+            this.el.style.top = pixels(delta.y);
+            return;
+          }
+          this.isBeingDragged =
+            Math.abs(this.refPoint.getDelta(e).x) +
+              Math.abs(this.refPoint.getDelta(e).y) >
+            dragTolerance;
+          if (this.isBeingDragged) {
+            this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+            this.el.classList.add(CSSClass.dragged);
+            this.incrementZIndex();
           }
         },
       ],
@@ -92,19 +96,18 @@ import RefPoint from './RefPoint/index.js';
                 CSSClass.released,
               );
               setTimeout(() => {
-                listItems.forEach(
-                  (el) =>
-                    (el.style.zIndex =
-                      wGCS(el).zIndex - (wGCS(el).zIndex > zIndBase)),
-                );
-                zInd -= zInd > zIndBase;
+                listItems.forEach((el) => {
+                  el.style.zIndex =
+                    wGCS(el).zIndex - (wGCS(el).zIndex > zIndexBase);
+                });
+                zIndex -= zIndex > zIndexBase;
               }, tmOut);
               this.el.style.top = 0;
+              this.el.style.left = 0;
               this.isTransitionEnded = false;
+              this.isBeingDragged = false;
             }
             this.el.classList.remove(CSSClass.grabbed);
-            this.isBeingDragged = false;
-            this.el.style.left = 0;
           }, 10);
           document.removeEventListener(...this.eventListener.mouseMove);
           document.removeEventListener(...this.eventListener.mouseUp);
@@ -121,6 +124,10 @@ import RefPoint from './RefPoint/index.js';
     };
     constructor(el) {
       this.el = el;
+      // this.zIndexBase = wGCS(el).zIndex;
+      el.classList.add(CSSClass.animated);
+      el.addEventListener(...this.eventListener.transitionEnd);
+      el.addEventListener(...this.eventListener.mouseDown);
     }
     getOffsetCenterY() {
       return this.el.offsetTop + this.el.offsetHeight / 2;
@@ -135,12 +142,31 @@ import RefPoint from './RefPoint/index.js';
       }
       return this;
     }
+    // decrementZIndex() {
+    //   const zIndexTentative = this.zIndex - this.zIndexIncrement;
+    //   if (this.zIndexBase == 'auto') {
+    //     if(zIndexTentative){}
+    //   }
+    //   if (this.zIndex != this.zIndexBase) {
+    //     this.zIndex -= this.zIndexIncrement;
+    //   }
+    //   this.el.style.zIndex = this.zIndex;
+    // }
+    // incrementZIndex() {
+    //   if (this.zIndex == 'auto') {
+    //     this.zIndex = this.zIndexIncrement; // or 1?
+    //   } else {
+    //     this.zIndex += this.zIndexIncrement;
+    //   }
+    //   this.el.style.zIndex = this.zIndex;
+    // }
+    incrementZIndex() {
+      this.el.style.zIndex = ++zIndex;
+    }
   }
+
   listItems.forEach((el) => {
-    el.classList.add(CSSClass.animated);
     el._ = new CustomProperties(el);
-    el.addEventListener(...el._.eventListener.transitionEnd);
-    el.addEventListener(...el._.eventListener.mouseDown);
   });
   document.oncontextmenu = (e) => e.preventDefault();
 })();
