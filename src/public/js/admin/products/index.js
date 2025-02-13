@@ -83,26 +83,24 @@ import RefPoint from './RefPoint/index.js';
       mouseUp: [
         'mouseup',
         () => {
-          setTimeout(() => {
-            if (this.isBeingDragged) {
-              this.el.classList.remove(CSSClass.dragged);
-              this.el.classList.add(
-                CSSClass.animated,
-                CSSClass.moving,
-                CSSClass.released,
-              );
-              setTimeout(() => {
-                listItems.forEach((el) => {
-                  el.style.zIndex =
-                    wGCS(el).zIndex - (wGCS(el).zIndex > zIndexBase);
-                });
-                zIndex -= zIndex > zIndexBase;
-              }, tmOut);
-              this.resetOffset();
-              this.isTransitionEnded = false;
-              this.isBeingDragged = false;
-            }
-          }, 10);
+          if (this.isBeingDragged) {
+            this.el.classList.remove(CSSClass.dragged);
+            this.el.classList.add(
+              CSSClass.animated,
+              CSSClass.moving,
+              CSSClass.released,
+            );
+            setTimeout(() => {
+              listItems.forEach((el) => {
+                el.style.zIndex =
+                  wGCS(el).zIndex - (wGCS(el).zIndex > zIndexBase);
+              });
+              zIndex -= zIndex > zIndexBase;
+            }, tmOut);
+            this.resetOffset();
+            this.isTransitionEnded = false;
+            this.isBeingDragged = false;
+          }
           this.el.classList.remove(CSSClass.grabbed);
           document.removeEventListener(...this.eventListener.mouseMove);
           document.removeEventListener(...this.eventListener.mouseUp);
