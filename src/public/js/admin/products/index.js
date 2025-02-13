@@ -104,8 +104,8 @@ import RefPoint from './RefPoint/index.js';
               this.isTransitionEnded = false;
               this.isBeingDragged = false;
             }
-            this.el.classList.remove(CSSClass.grabbed);
           }, 10);
+          this.el.classList.remove(CSSClass.grabbed);
           document.removeEventListener(...this.eventListener.mouseMove);
           document.removeEventListener(...this.eventListener.mouseUp);
         },
