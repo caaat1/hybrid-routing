@@ -16,7 +16,7 @@ import RefPoint from './RefPoint/index.js';
     '[data-xpath^="body/main/div"]:not([data-xpath*="]/div"])',
   );
   const px = 'px';
-  const tmOut = 1e3;
+  const tmOut = 10e3;
   const wGCS = window.getComputedStyle;
 
   const zIndexBase = 0;
@@ -33,8 +33,7 @@ import RefPoint from './RefPoint/index.js';
       mouseDown: [
         'mousedown',
         (e) => {
-          let isGrabbed = this.isTransitionEnded && e.which < 2;
-          if (isGrabbed) {
+          if (this.isGrabbingAllowed(e)) {
             this.el.classList.add(CSSClass.grabbed);
             document.addEventListener(...this.eventListener.mouseMove);
             document.addEventListener(...this.eventListener.mouseUp);
@@ -47,29 +46,7 @@ import RefPoint from './RefPoint/index.js';
         (e) => {
           const delta = this.refPoint.getDelta(e);
           if (this.isBeingDragged) {
-            [-1, 1].forEach((sign, index) => {
-              let elTrio = [
-                this.el.previousElementSibling,
-                this.el,
-                this.el.nextElementSibling,
-              ];
-              let sibling = elTrio[sign + 1];
-              if (sibling) {
-                let isNextElSurpassed =
-                  elTrio[index]._.getOffsetCenterY() >
-                  elTrio[index + 1]._.getOffsetCenterY();
-                if (isNextElSurpassed && sibling._.isTransitionEnded) {
-                  list.insertBefore(elTrio[index + 1], elTrio[index]);
-                  sibling.style.top = `${sign * this.getOffsetHeightMarginTop()}${px}`;
-                  sibling.classList.add(CSSClass.moving);
-                  sibling._.isTransitionEnded = false;
-                  this.refPoint.y +=
-                    sign * sibling._.getOffsetHeightMarginTop();
-                  sibling.style.top = 0;
-                }
-              }
-            });
-            this.updateOffset(delta);
+            this.handleDragReorder(delta);
             return;
           }
           this.isBeingDragged = this.isDragged(delta);
@@ -90,13 +67,7 @@ import RefPoint from './RefPoint/index.js';
               CSSClass.moving,
               CSSClass.released,
             );
-            setTimeout(() => {
-              listItems.forEach((el) => {
-                el.style.zIndex =
-                  wGCS(el).zIndex - (wGCS(el).zIndex > zIndexBase);
-              });
-              zIndex -= zIndex > zIndexBase;
-            }, tmOut);
+            this.updateZIndexAll();
             this.resetOffset();
             this.isTransitionEnded = false;
             this.isBeingDragged = false;
@@ -145,6 +116,30 @@ import RefPoint from './RefPoint/index.js';
     //   }
     //   this.el.style.zIndex = this.zIndex;
     // }
+    handleDragReorder(delta) {
+      [-1, 1].forEach((sign, index) => {
+        let elTrio = [
+          this.el.previousElementSibling,
+          this.el,
+          this.el.nextElementSibling,
+        ];
+        let sibling = elTrio[sign + 1];
+        if (sibling) {
+          let isNextElSurpassed =
+            elTrio[index]._.getOffsetCenterY() >
+            elTrio[index + 1]._.getOffsetCenterY();
+          if (isNextElSurpassed && sibling._.isTransitionEnded) {
+            list.insertBefore(elTrio[index + 1], elTrio[index]);
+            sibling.style.top = `${sign * this.getOffsetHeightMarginTop()}${px}`;
+            sibling.classList.add(CSSClass.moving);
+            sibling._.isTransitionEnded = false;
+            this.refPoint.y += sign * sibling._.getOffsetHeightMarginTop();
+            sibling.style.top = 0;
+          }
+        }
+      });
+      this.updateOffset(delta);
+    }
     // incrementZIndex() {
     //   if (this.zIndex == 'auto') {
     //     this.zIndex = this.zIndexIncrement; // or 1?
@@ -159,16 +154,29 @@ import RefPoint from './RefPoint/index.js';
     isDragged(delta) {
       return Math.abs(delta.x) + Math.abs(delta.y) > dragTolerance;
     }
-    updateOffset(delta) {
-      this.el.style.left = pixels(delta.x);
-      this.el.style.top = pixels(delta.y);
+    isGrabbingAllowed(event) {
+      return this.isTransitionEnded && event.which < 2;
     }
     resetOffset() {
       this.el.style.top = 0;
       this.el.style.left = 0;
     }
+    updateOffset(delta) {
+      this.el.style.left = pixels(delta.x);
+      this.el.style.top = pixels(delta.y);
+    }
+    updateZIndexAll() {
+      setTimeout(() => {
+        listItems.forEach((el) => {
+          el.style.zIndex = wGCS(el).zIndex - (wGCS(el).zIndex > zIndexBase);
+        });
+        zIndex -= zIndex > zIndexBase;
+      }, tmOut);
+      this.resetOffset();
+      this.isTransitionEnded = false;
+      this.isBeingDragged = false;
+    }
   }
-
   listItems.forEach((el) => {
     el._ = new CustomProperties(el);
   });
