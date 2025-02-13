@@ -6,21 +6,21 @@ export default class RefPoint {
     this.x = x;
     this.y = y;
   }
-  setDelta(event) {
-    this.delta = new Delta(event, this);
+  setDelta(e) {
+    this.delta = new Delta(e, this);
   }
 }
 class Delta {
-  event;
+  e;
   refPoint;
-  constructor(event, refPoint) {
-    this.event = event;
+  constructor(e, refPoint) {
+    this.e = e;
     this.refPoint = refPoint;
   }
   get x() {
-    return this.event.pageX - this.refPoint.x;
+    return this.e.pageX - this.refPoint.x;
   }
   get y() {
-    return this.event.pageY - this.refPoint.y;
+    return this.e.pageY - this.refPoint.y;
   }
 }

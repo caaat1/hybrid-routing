@@ -27,8 +27,8 @@ import RefPoint from './RefPoint/index.js';
     zIndex;
     zIndexBase;
     zIndexIncrement = 1;
-    // _isBeingDragged = false;
-    isBeingDragged = false;
+    _isBeingDragged = false;
+    // isBeingDragged = false;
     isTransitionEnded = true;
     eventListener = {
       elt: {
@@ -60,12 +60,6 @@ import RefPoint from './RefPoint/index.js';
             if (this.isBeingDragged) {
               this.handleDragReorder();
             }
-            this.isBeingDragged = this.isDragToleranceExceeded();
-            if (this.isBeingDragged) {
-              this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
-              this.el.classList.add(CSSClass.dragged);
-              this.incrementZIndex();
-            }
           },
         ],
         mouseup: [
@@ -81,7 +75,6 @@ import RefPoint from './RefPoint/index.js';
               this.updateZIndexAll();
               this.resetOffset();
               this.isTransitionEnded = false;
-              // this._isBeingDragged = false;
               this.isBeingDragged = false;
             }
             this.el.classList.remove(CSSClass.grabbed);
@@ -156,17 +149,20 @@ import RefPoint from './RefPoint/index.js';
     incrementZIndex() {
       this.el.style.zIndex = ++zIndex;
     }
-    // get isBeingDragged(delta) {
-    //   if (false === this._isBeingDragged) {
-    //     this._isBeingDragged = this.isDragToleranceExceeded(delta);
-    //     if (this._isBeingDragged) {
-    //       this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
-    //       this.el.classList.add(CSSClass.dragged);
-    //       this.incrementZIndex();
-    //     }
-    //   }
-    //   return this._isBeingDragged;
-    // }
+    get isBeingDragged() {
+      if (false === this._isBeingDragged) {
+        this._isBeingDragged = this.isDragToleranceExceeded();
+        if (this._isBeingDragged) {
+          this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+          this.el.classList.add(CSSClass.dragged);
+          this.incrementZIndex();
+        }
+      }
+      return this._isBeingDragged;
+    }
+    set isBeingDragged(value) {
+      this._isBeingDragged = value;
+    }
     isDragToleranceExceeded() {
       return (
         Math.abs(this.refPoint.delta.x) + Math.abs(this.refPoint.delta.y) >
