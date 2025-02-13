@@ -16,7 +16,7 @@ import RefPoint from './RefPoint/index.js';
     '[data-xpath^="body/main/div"]:not([data-xpath*="]/div"])',
   );
   const px = 'px';
-  const tmOut = 10e3;
+  const tmOut = 2e3;
   const wGCS = window.getComputedStyle;
 
   const zIndexBase = 0;
@@ -27,79 +27,84 @@ import RefPoint from './RefPoint/index.js';
     zIndex;
     zIndexBase;
     zIndexIncrement = 1;
+    // _isBeingDragged = false;
     isBeingDragged = false;
     isTransitionEnded = true;
     eventListener = {
-      mouseDown: [
-        'mousedown',
-        (e) => {
-          if (this.isGrabbingAllowed(e)) {
-            this.el.classList.add(CSSClass.grabbed);
-            document.addEventListener(...this.eventListener.mouseMove);
-            document.addEventListener(...this.eventListener.mouseUp);
-            this.refPoint = new RefPoint(e.pageX, e.pageY);
-          }
-        },
-      ],
-      mouseMove: [
-        'mousemove',
-        (e) => {
-          const delta = this.refPoint.getDelta(e);
-          if (this.isBeingDragged) {
-            this.handleDragReorder(delta);
-            return;
-          }
-          this.isBeingDragged = this.isDragged(delta);
-          if (this.isBeingDragged) {
-            this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
-            this.el.classList.add(CSSClass.dragged);
-            this.incrementZIndex();
-          }
-        },
-      ],
-      mouseUp: [
-        'mouseup',
-        () => {
-          if (this.isBeingDragged) {
-            this.el.classList.remove(CSSClass.dragged);
-            this.el.classList.add(
-              CSSClass.animated,
-              CSSClass.moving,
-              CSSClass.released,
-            );
-            this.updateZIndexAll();
-            this.resetOffset();
-            this.isTransitionEnded = false;
-            this.isBeingDragged = false;
-          }
-          this.el.classList.remove(CSSClass.grabbed);
-          document.removeEventListener(...this.eventListener.mouseMove);
-          document.removeEventListener(...this.eventListener.mouseUp);
-        },
-      ],
-      transitionEnd: [
-        'transitionend',
-        () => {
-          this.isTransitionEnded = true;
-          this.el.style.removeProperty('top');
-          this.el.classList.remove(CSSClass.moving, CSSClass.released);
-        },
-      ],
+      elt: {
+        mousedown: [
+          'mousedown',
+          (e) => {
+            if (this.isGrabbingAllowed(e)) {
+              this.el.classList.add(CSSClass.grabbed);
+              document.addEventListener(...this.eventListener.doc.mousemove);
+              document.addEventListener(...this.eventListener.doc.mouseup);
+              this.refPoint = new RefPoint(e.pageX, e.pageY);
+            }
+          },
+        ],
+        transitionend: [
+          'transitionend',
+          () => {
+            this.isTransitionEnded = true;
+            this.el.style.removeProperty('top');
+            this.el.classList.remove(CSSClass.moving, CSSClass.released);
+          },
+        ],
+      },
+      doc: {
+        mousemove: [
+          'mousemove',
+          (e) => {
+            const delta = this.refPoint.getDelta(e);
+            if (this.isBeingDragged) {
+              this.handleDragReorder(delta);
+            }
+            this.isBeingDragged = this.isDragToleranceExceeded(delta);
+            if (this.isBeingDragged) {
+              this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+              this.el.classList.add(CSSClass.dragged);
+              this.incrementZIndex();
+            }
+          },
+        ],
+        mouseup: [
+          'mouseup',
+          () => {
+            if (this.isBeingDragged) {
+              this.el.classList.remove(CSSClass.dragged);
+              this.el.classList.add(
+                CSSClass.animated,
+                CSSClass.moving,
+                CSSClass.released,
+              );
+              this.updateZIndexAll();
+              this.resetOffset();
+              this.isTransitionEnded = false;
+              // this._isBeingDragged = false;
+              this.isBeingDragged = false;
+            }
+            this.el.classList.remove(CSSClass.grabbed);
+            document.removeEventListener(...this.eventListener.doc.mousemove);
+            document.removeEventListener(...this.eventListener.doc.mouseup);
+          },
+        ],
+      },
     };
     constructor(el) {
       this.el = el;
       // this.zIndexBase = wGCS(el).zIndex;
       el.classList.add(CSSClass.animated);
-      el.addEventListener(...this.eventListener.transitionEnd);
-      el.addEventListener(...this.eventListener.mouseDown);
+      el.addEventListener(...this.eventListener.elt.transitionend);
+      el.addEventListener(...this.eventListener.elt.mousedown);
     }
-    addEventListener(type) {
-      const listener = this.eventListener[type];
-      if (listener) {
-        this.el.addEventListener(type, this.eventListener[type]);
-      }
-      return this;
-    }
+    // addEventListener(type) {
+    //   const listener = this.eventListener[type];
+    //   if (listener) {
+    //     this.el.addEventListener(type, this.eventListener[type]);
+    //   }
+    //   return this;
+    // }
     getOffsetCenterY() {
       return this.el.offsetTop + this.el.offsetHeight / 2;
     }
@@ -151,8 +156,23 @@ import RefPoint from './RefPoint/index.js';
     incrementZIndex() {
       this.el.style.zIndex = ++zIndex;
     }
-    isDragged(delta) {
-      return Math.abs(delta.x) + Math.abs(delta.y) > dragTolerance;
+    // get isBeingDragged(delta) {
+    //   if (false === this._isBeingDragged) {
+    //     this._isBeingDragged = this.isDragToleranceExceeded(delta);
+    //     if (this._isBeingDragged) {
+    //       this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+    //       this.el.classList.add(CSSClass.dragged);
+    //       this.incrementZIndex();
+    //     }
+    //   }
+    //   return this._isBeingDragged;
+    // }
+    isDragToleranceExceeded(delta) {
+      return (
+        Math.abs(/* this.refPoint. */ delta.x) +
+          Math.abs(/* this.refPoint. */ delta.y) >
+        dragTolerance
+      );
     }
     isGrabbingAllowed(event) {
       return this.isTransitionEnded && event.which < 2;
@@ -162,8 +182,8 @@ import RefPoint from './RefPoint/index.js';
       this.el.style.left = 0;
     }
     updateOffset(delta) {
-      this.el.style.left = pixels(delta.x);
-      this.el.style.top = pixels(delta.y);
+      this.el.style.left = pixels(/* this.refPoint. */ delta.x);
+      this.el.style.top = pixels(/* this.refPoint. */ delta.y);
     }
     updateZIndexAll() {
       setTimeout(() => {
@@ -172,9 +192,6 @@ import RefPoint from './RefPoint/index.js';
         });
         zIndex -= zIndex > zIndexBase;
       }, tmOut);
-      this.resetOffset();
-      this.isTransitionEnded = false;
-      this.isBeingDragged = false;
     }
   }
   listItems.forEach((el) => {

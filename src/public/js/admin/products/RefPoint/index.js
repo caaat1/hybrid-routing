@@ -1,12 +1,13 @@
 export default class RefPoint {
+  x;
+  y;
+  delta;
   constructor(x, y) {
-    x;
-    y;
     this.x = x;
     this.y = y;
   }
-  getDelta(event) {
-    return new Delta(event, this);
+  setDelta(event) {
+    this.delta = new Delta(event, this);
   }
 }
 class Delta {
