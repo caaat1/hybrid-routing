@@ -21,16 +21,15 @@
   background: hsl(60, 100%, 90%, 0.5);
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).animated {
-  transition-duration: 10s;
+  transition-duration: 2s;
   transition-property: left, top;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged,
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged:hover {
   background: hsl(192, 100%, 50%, 0.99);
   cursor: move;
-  pointer-events: none;
 }
-[data-xpath^='body/main/div']:not([data-xpath*=']/div']).grabbed:hover {
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).grabbed {
   background: hsl(220, 100%, 90%, 0.99);
   cursor: move;
 }

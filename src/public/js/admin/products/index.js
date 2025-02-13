@@ -1,3 +1,4 @@
+import Drag from './Drag/index.js';
 import pixels from './pixels/index.js';
 import RefPoint from './RefPoint/index.js';
 
@@ -10,7 +11,6 @@ import RefPoint from './RefPoint/index.js';
     moving: 'moving',
     released: 'released',
   };
-  const dragTolerance = 4;
   const list = document.querySelector('[data-xpath="body/main"]');
   const listItems = list.querySelectorAll(
     '[data-xpath^="body/main/div"]:not([data-xpath*="]/div"])',
@@ -35,7 +35,7 @@ import RefPoint from './RefPoint/index.js';
         mousedown: [
           'mousedown',
           (e) => {
-            if (this.isGrabbingAllowed(e)) {
+            if (this.isGrabAllowed(e)) {
               this.el.classList.add(CSSClass.grabbed);
               document.addEventListener(...this.eventListener.doc.mousemove);
               document.addEventListener(...this.eventListener.doc.mouseup);
@@ -47,8 +47,17 @@ import RefPoint from './RefPoint/index.js';
           'transitionend',
           () => {
             this.isTransitionEnded = true;
+            this.el.style.removeProperty('left');
             this.el.style.removeProperty('top');
+            this.el.style.removeProperty('z-index');
             this.el.classList.remove(CSSClass.moving, CSSClass.released);
+          },
+        ],
+        transitionstart: [
+          'transitionstart',
+          () => {
+            this.isTransitionEnded = false;
+            this.el.classList.add(CSSClass.moving);
           },
         ],
       },
@@ -56,10 +65,18 @@ import RefPoint from './RefPoint/index.js';
         mousemove: [
           'mousemove',
           (e) => {
-            this.refPoint.setDelta(e);
-            if (this.isBeingDragged) {
-              this.handleDragReorder();
+            this.refPoint.e = e;
+            if (false === this.isBeingDragged) {
+              this.isBeingDragged = new Drag(
+                this.refPoint.delta,
+              ).isToleranceExceeded;
+              if (this.isBeingDragged) {
+                this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+                this.el.classList.add(CSSClass.dragged);
+                this.incrementZIndex();
+              }
             }
+            this.handleDragReorder();
           },
         ],
         mouseup: [
@@ -67,17 +84,13 @@ import RefPoint from './RefPoint/index.js';
           () => {
             if (this.isBeingDragged) {
               this.el.classList.remove(CSSClass.dragged);
-              this.el.classList.add(
-                CSSClass.animated,
-                CSSClass.moving,
-                CSSClass.released,
-              );
+              this.el.classList.add(CSSClass.animated, CSSClass.released);
               this.updateZIndexAll();
               this.resetOffset();
-              this.isTransitionEnded = false;
-              this.isBeingDragged = false;
+            } else {
+              this.el.classList.remove(CSSClass.grabbed);
             }
-            this.el.classList.remove(CSSClass.grabbed);
+            this.isBeingDragged = false;
             document.removeEventListener(...this.eventListener.doc.mousemove);
             document.removeEventListener(...this.eventListener.doc.mouseup);
           },
@@ -88,8 +101,15 @@ import RefPoint from './RefPoint/index.js';
       this.el = el;
       // this.zIndexBase = wGCS(el).zIndex;
       el.classList.add(CSSClass.animated);
-      el.addEventListener(...this.eventListener.elt.transitionend);
       el.addEventListener(...this.eventListener.elt.mousedown);
+      el.addEventListener(...this.eventListener.elt.transitionend);
+      el.addEventListener(...this.eventListener.elt.transitionstart);
+    }
+    get isBeingDragged() {
+      return this._isBeingDragged;
+    }
+    set isBeingDragged(value) {
+      this._isBeingDragged = value;
     }
     // addEventListener(type) {
     //   const listener = this.eventListener[type];
@@ -115,24 +135,27 @@ import RefPoint from './RefPoint/index.js';
     //   this.el.style.zIndex = this.zIndex;
     // }
     handleDragReorder() {
-      [-1, 1].forEach((sign, index) => {
-        let elTrio = [
-          this.el.previousElementSibling,
-          this.el,
-          this.el.nextElementSibling,
-        ];
-        let sibling = elTrio[sign + 1];
+      let elTrio = [
+        this.el.previousElementSibling,
+        this.el,
+        this.el.nextElementSibling,
+      ];
+      let siblings = [
+        this.el.previousElementSibling,
+        this.el.nextElementSibling,
+      ];
+      siblings.forEach((sibling, index) => {
         if (sibling) {
-          let isNextElSurpassed =
+          let isOrderChanged =
             elTrio[index]._.getOffsetCenterY() >
             elTrio[index + 1]._.getOffsetCenterY();
-          if (isNextElSurpassed && sibling._.isTransitionEnded) {
+
+          if (isOrderChanged && sibling._.isTransitionEnded) {
             list.insertBefore(elTrio[index + 1], elTrio[index]);
+            let sign = index ? 1 : -1;
             sibling.style.top = `${sign * this.getOffsetHeightMarginTop()}${px}`;
-            sibling.classList.add(CSSClass.moving);
-            sibling._.isTransitionEnded = false;
-            this.refPoint.y += sign * sibling._.getOffsetHeightMarginTop();
-            sibling.style.top = 0;
+            this.refPoint.y = sign * sibling._.getOffsetHeightMarginTop();
+            sibling._.resetOffset();
           }
         }
       });
@@ -149,27 +172,13 @@ import RefPoint from './RefPoint/index.js';
     incrementZIndex() {
       this.el.style.zIndex = ++zIndex;
     }
-    get isBeingDragged() {
-      if (false === this._isBeingDragged) {
-        this._isBeingDragged = this.isDragToleranceExceeded();
-        if (this._isBeingDragged) {
-          this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
-          this.el.classList.add(CSSClass.dragged);
-          this.incrementZIndex();
-        }
-      }
-      return this._isBeingDragged;
-    }
-    set isBeingDragged(value) {
-      this._isBeingDragged = value;
-    }
-    isDragToleranceExceeded() {
-      return (
-        Math.abs(this.refPoint.delta.x) + Math.abs(this.refPoint.delta.y) >
-        dragTolerance
-      );
-    }
-    isGrabbingAllowed(event) {
+    // isDragToleranceExceeded() {
+    //   return (
+    //     Math.abs(this.refPoint.delta.x) + Math.abs(this.refPoint.delta.y) >
+    //     dragTolerance
+    //   );
+    // }
+    isGrabAllowed(event) {
       return this.isTransitionEnded && event.which < 2;
     }
     resetOffset() {
