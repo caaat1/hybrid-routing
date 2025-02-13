@@ -45,6 +45,7 @@ import RefPoint from './RefPoint/index.js';
       mouseMove: [
         'mousemove',
         (e) => {
+          const delta = this.refPoint.getDelta(e);
           if (this.isBeingDragged) {
             [-1, 1].forEach((sign, index) => {
               let elTrio = [
@@ -68,15 +69,11 @@ import RefPoint from './RefPoint/index.js';
                 }
               }
             });
-            const delta = this.refPoint.getDelta(e);
             this.el.style.left = pixels(delta.x);
             this.el.style.top = pixels(delta.y);
             return;
           }
-          this.isBeingDragged =
-            Math.abs(this.refPoint.getDelta(e).x) +
-              Math.abs(this.refPoint.getDelta(e).y) >
-            dragTolerance;
+          this.isBeingDragged = this.isDragged(delta);
           if (this.isBeingDragged) {
             this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
             this.el.classList.add(CSSClass.dragged);
@@ -129,18 +126,18 @@ import RefPoint from './RefPoint/index.js';
       el.addEventListener(...this.eventListener.transitionEnd);
       el.addEventListener(...this.eventListener.mouseDown);
     }
-    getOffsetCenterY() {
-      return this.el.offsetTop + this.el.offsetHeight / 2;
-    }
-    getOffsetHeightMarginTop() {
-      return this.el.offsetHeight + parseFloat(wGCS(this.el).marginTop);
-    }
     addEventListener(type) {
       const listener = this.eventListener[type];
       if (listener) {
         this.el.addEventListener(type, this.eventListener[type]);
       }
       return this;
+    }
+    getOffsetCenterY() {
+      return this.el.offsetTop + this.el.offsetHeight / 2;
+    }
+    getOffsetHeightMarginTop() {
+      return this.el.offsetHeight + parseFloat(wGCS(this.el).marginTop);
     }
     // decrementZIndex() {
     //   const zIndexTentative = this.zIndex - this.zIndexIncrement;
@@ -162,6 +159,9 @@ import RefPoint from './RefPoint/index.js';
     // }
     incrementZIndex() {
       this.el.style.zIndex = ++zIndex;
+    }
+    isDragged(delta) {
+      return Math.abs(delta.x) + Math.abs(delta.y) > dragTolerance;
     }
   }
 

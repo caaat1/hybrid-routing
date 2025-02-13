@@ -8,7 +8,6 @@ export default class RefPoint {
   getDelta(event) {
     return new Delta(event, this);
   }
-  deltaX() {}
 }
 class Delta {
   event;
