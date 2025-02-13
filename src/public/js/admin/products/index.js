@@ -69,8 +69,7 @@ import RefPoint from './RefPoint/index.js';
                 }
               }
             });
-            this.el.style.left = pixels(delta.x);
-            this.el.style.top = pixels(delta.y);
+            this.updateOffset(delta);
             return;
           }
           this.isBeingDragged = this.isDragged(delta);
@@ -99,8 +98,7 @@ import RefPoint from './RefPoint/index.js';
                 });
                 zIndex -= zIndex > zIndexBase;
               }, tmOut);
-              this.el.style.top = 0;
-              this.el.style.left = 0;
+              this.resetOffset();
               this.isTransitionEnded = false;
               this.isBeingDragged = false;
             }
@@ -162,6 +160,14 @@ import RefPoint from './RefPoint/index.js';
     }
     isDragged(delta) {
       return Math.abs(delta.x) + Math.abs(delta.y) > dragTolerance;
+    }
+    updateOffset(delta) {
+      this.el.style.left = pixels(delta.x);
+      this.el.style.top = pixels(delta.y);
+    }
+    resetOffset() {
+      this.el.style.top = 0;
+      this.el.style.left = 0;
     }
   }
 
