@@ -66,17 +66,18 @@ import RefPoint from './RefPoint/index.js';
           'mousemove',
           (e) => {
             this.refPoint.e = e;
-            if (false === this.isBeingDragged) {
-              this.isBeingDragged = new Drag(
-                this.refPoint.delta,
-              ).isToleranceExceeded;
-              if (this.isBeingDragged) {
-                this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
-                this.el.classList.add(CSSClass.dragged);
-                this.incrementZIndex();
-              }
+            if (this.isBeingDragged) {
+              this.handleDragReorder();
+              return;
             }
-            this.handleDragReorder();
+            this.isBeingDragged = new Drag(
+              this.refPoint.delta,
+            ).isToleranceExceeded;
+            if (this.isBeingDragged) {
+              this.el.classList.remove(CSSClass.animated, CSSClass.grabbed);
+              this.el.classList.add(CSSClass.dragged);
+              this.incrementZIndex();
+            }
           },
         ],
         mouseup: [
