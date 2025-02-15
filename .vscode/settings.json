@@ -7,13 +7,11 @@
       "scope": "folder"
     }
   },
-  "cSpell.ignoreWords": [
-    "Zner",
-    "nylsuxlvho"
-  ],
+  "cSpell.ignoreWords": ["Zner", "nylsuxlvho"],
   "cSpell.words": [
     "aproba",
     "arrayof",
+    "Grabbable",
     "kgolov",
     "mapbox",
     "safehandler",
