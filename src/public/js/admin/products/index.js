@@ -204,5 +204,5 @@ import SortableList from './SortableList/index.js';
   //   el._ = new CustomProperties(el);
   // });
   document.oncontextmenu = (e) => e.preventDefault();
-  new SortableList(...listItems);
+  console.log(new SortableList(1, 2, 3, 4).toArray());
 })();

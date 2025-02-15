@@ -73,16 +73,18 @@
 //   }
 // }
 export default class Node {
-  el;
+  holder;
   next;
   prev;
-  constructor(el, prev, getNext) {
-    this.el = el;
+
+  constructor(item, prev, itemIterator) {
+    this.holder = new Holder(item);
     this.prev = prev;
-    this.next = getNext(this);
-    this.attachStyles();
-    this.addEventListeners();
+    this.next = Node.build(this, itemIterator);
   }
-  attachStyles() {}
-  addEventListeners() {}
+
+  static build(prev, itemIterator) {
+    const {value, done} = itemIterator.next();
+    return done ? null : new Node(value, prev, itemIterator);
+  }
 }

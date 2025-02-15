@@ -5,56 +5,42 @@ export default class SortableList {
   constructor(...arr) {
     this.checkIfArray(arr);
     this.length = arr.length;
-    this.head = Node.create(null, this.getArrayItem(arr));
+    this.head = Node.build(null, arr[Symbol.iterator]());
     console.log(this.head);
   }
 
-  *getArrayItem(arr) {
-    yield* arr; // Generator yielding array items one by one
-  }
-
   checkIfArray(arr) {
-    if (!Array.isArray(arr)) {
+    if (false === Array.isArray(arr)) {
       throw new Error('Argument must be an array');
     }
   }
 
   toArray() {
-    const result = [];
-    let current = this.head;
-    while (current) {
-      result.push(current.el); // Push node value into result array
-      current = current.next;
-    }
-    return result;
+    return [...this]; // Use the iterable protocol
   }
 
   *[Symbol.iterator]() {
     let current = this.head;
     while (current) {
-      yield current.el; // Yield each node's value
+      yield current.item; // Yield each node's value
       current = current.next;
     }
   }
 }
 
 class Node {
-  el;
-  next = null; // Explicitly define next for readability
+  item;
+  next;
   prev;
 
-  constructor(el, prev) {
-    this.el = el;
+  constructor(item, prev, itemIterator) {
+    this.item = item;
     this.prev = prev;
+    this.next = Node.build(this, itemIterator);
   }
 
-  static create(prev, iterator) {
-    const {value, done} = iterator.next();
-    if (done) {
-      return null;
-    }
-    const node = new Node(value, prev); // Create node with value
-    node.next = Node.create(node, iterator); // Recursively create next node
-    return node;
+  static build(prev, itemIterator) {
+    const {value, done} = itemIterator.next();
+    return done ? null : new Node(value, prev, itemIterator);
   }
 }
