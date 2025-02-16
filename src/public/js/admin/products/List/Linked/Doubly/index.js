@@ -1,13 +1,13 @@
-import Node from './Node/index.js';
+import DoublyLinkedListItem from './_/Item/index.js';
 
-export default class SortableList {
+export default class Doubly {
   head;
   length;
 
   constructor(...arr) {
     this.checkIfArray(arr);
     this.length = arr.length;
-    this.head = Node.build(null, arr[Symbol.iterator]());
+    this.head = DoublyLinkedListItem.build(null, arr[Symbol.iterator]());
     console.log(this.head);
   }
 

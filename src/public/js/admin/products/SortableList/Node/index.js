@@ -73,12 +73,12 @@
 //   }
 // }
 export default class Node {
-  holder;
+  item;
   next;
   prev;
 
   constructor(item, prev, itemIterator) {
-    this.holder = new Holder(item);
+    this.item = item;
     this.prev = prev;
     this.next = Node.build(this, itemIterator);
   }

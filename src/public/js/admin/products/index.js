@@ -1,7 +1,8 @@
 // import Drag from './Drag/index.js';
 // import pixels from './pixels/index.js';
 // import RefPoint from './RefPoint/index.js';
-import SortableList from './SortableList/index.js';
+import DoublyLinkedList from './List/Linked/Doubly/index.js';
+import SortableList_Item from './List/Sortable/_/Item/index.js';
 
 (function () {
   'use strict';
@@ -13,7 +14,7 @@ import SortableList from './SortableList/index.js';
   //   released: 'released',
   // };
   const list = document.querySelector('[data-xpath="body/main"]');
-  const listItems = list.querySelectorAll(
+  const listElements = list.querySelectorAll(
     '[data-xpath^="body/main/div"]:not([data-xpath*="]/div"])',
   );
   // const px = 'px';
@@ -203,6 +204,11 @@ import SortableList from './SortableList/index.js';
   // listItems.forEach((el) => {
   //   el._ = new CustomProperties(el);
   // });
+
   document.oncontextmenu = (e) => e.preventDefault();
-  console.log(new SortableList(1, 2, 3, 4).toArray());
+
+  const sortableItems = [...listElements].map(
+    (element) => new SortableList_Item(element),
+  );
+  new DoublyLinkedList(...sortableItems);
 })();
