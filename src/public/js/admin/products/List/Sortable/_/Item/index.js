@@ -53,75 +53,35 @@ export default class Item {
     return this.isTransitionEnded && e.which < 2;
   }
 
-  setEventListener(node, eventHandlerPath) {
+  getEventData(node, eventHandlerPath) {
     const nodeType = node.nodeType;
-    const eventHandlerPathSegments = eventHandlerPath.split('.');
-    const eventType = eventHandlerPathSegments[0];
-    const keys = [nodeType, ...eventHandlerPathSegments];
-
-    let pathSegments = [];
-    let currentEventHandlerClassesObject = this.eventHandlerClasses;
-    let currentEventHandlersObject = this.eventHandlers;
-
-    do {
-      let currentKey = keys.shift();
-      pathSegments.push(currentKey);
-      if (Object.hasOwn(currentEventHandlerClassesObject, currentKey)) {
-        let currentEventHandlerClassesObject =
-          currentEventHandlerClassesObject[currentKey];
-
-        if (false === Object.hasOwn(currentEventHandlersObject, currentKey)) {
-          currentEventHandlersObject[currentKey] = {};
-        }
-        currentEventHandlersObject = currentEventHandlersObject[currentKey];
-      } else {
-        throw new Error(`Handlers for ${pathSegments} are not defined`);
-      }
-    } while (keys.length);
-
-    if (isClass(currentEventHandlerClassesObject)) {
-      let eventHandler = (e) =>
-        new currentEventHandlerClassesObject(this).handle(e);
-      setDeep(this.eventHandlers, pathSegments, eventHandler);
-      node.addEventListener(eventType, eventHandler);
-    } else {
-      throw new Error(`Value for ${pathSegments} is not a handler class`);
-    }
-
-    // console.log(this.eventHandlers);
+    const eventHandlerPathSegments = [nodeType, ...eventHandlerPath.split('.')];
+    return {
+      type: eventHandlerPathSegments[1],
+      handlerPathSegments: eventHandlerPathSegments,
+    };
+  }
+  setEventListener(node, eventHandlerPath) {
+    const eventData = this.getEventData(node, eventHandlerPath);
+    const EventHandlerClass = getDeep(
+      this.eventHandlerClasses,
+      eventData.handlerPathSegments,
+    );
+    const eventHandlerInstance = new EventHandlerClass(this);
+    const eventHandler = (e) => eventHandlerInstance.handle(e);
+    setDeep(this.eventHandlers, eventData.handlerPathSegments, eventHandler);
+    node.addEventListener(eventData.type, eventHandler);
     return this;
   }
   unsetEventListener(node, eventHandlerPath) {
-    const nodeType = node.nodeType;
-    const eventHandlerPathSegments = eventHandlerPath.split('.');
-    const eventType = eventHandlerPathSegments[0];
-    const keys = [nodeType, ...eventHandlerPathSegments];
-    const eventHandler = getDeep(this.eventHandlers, keys);
-    node.removeEventListener(eventType, eventHandler);
+    const eventData = this.getEventData(node, eventHandlerPath);
+    const eventHandler = getDeep(
+      this.eventHandlers,
+      eventData.handlerPathSegments,
+    );
+    node.removeEventListener(eventData.type, eventHandler);
     return this;
   }
-}
-
-function isClass(value) {
-  try {
-    Reflect.construct(String, [], value);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-function setDeep(obj, path, value) {
-  let current = obj;
-  let lastKey = path.pop(); // Extract the last key to set the value later
-
-  for (let key of path) {
-    if (!(key in current) || typeof current[key] !== 'object') {
-      current[key] = {}; // Ensure intermediate objects exist
-    }
-    current = current[key]; // Move deeper
-  }
-
-  current[lastKey] = value; // Set the final value
 }
 function getDeep(obj, path) {
   let current = obj;
@@ -134,4 +94,25 @@ function getDeep(obj, path) {
   }
 
   return current; // Return the final value
+}
+// function isClass(value) {
+//   try {
+//     Reflect.construct(String, [], value);
+//     return true;
+//   } catch (e) {
+//     return false;
+//   }
+// }
+function setDeep(obj, path, value) {
+  let current = obj;
+  let lastKey = path.pop(); // Extract the last key to set the value later
+
+  for (let key of path) {
+    if (!(key in current) || typeof current[key] !== 'object') {
+      current[key] = {}; // Ensure intermediate objects exist
+    }
+    current = current[key]; // Move deeper
+  }
+
+  current[lastKey] = value; // Set the final value
 }

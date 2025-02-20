@@ -1,7 +1,6 @@
 import MouseMove from '../index.js';
 
 export default class DragStart extends MouseMove {
-  handle = this.before;
   after = (e) => {
     console.log('there!');
   };
@@ -9,7 +8,6 @@ export default class DragStart extends MouseMove {
     console.log('here!');
     if (this.sortableList_item.drag.isToleranceExceeded(e)) {
       // this.el.classList.add(this.CSSClass.pulled);
-      console.log('almost there');
       this.handle = this.after;
       this.sortableList_item.el.classList.remove(
         this.sortableList_item.CSSClass.animated,
@@ -22,4 +20,5 @@ export default class DragStart extends MouseMove {
       // this.incrementZIndex();
     }
   };
+  handle = this.before;
 }
