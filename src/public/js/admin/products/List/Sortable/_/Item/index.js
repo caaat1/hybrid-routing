@@ -53,7 +53,7 @@ export default class Item {
     return this.isTransitionEnded && e.which < 2;
   }
 
-  getEventData(node, eventHandlerPath) {
+  getEvent(node, eventHandlerPath) {
     const nodeType = node.nodeType;
     const eventHandlerPathSegments = [nodeType, ...eventHandlerPath.split('.')];
     return {
@@ -62,24 +62,21 @@ export default class Item {
     };
   }
   setEventListener(node, eventHandlerPath) {
-    const eventData = this.getEventData(node, eventHandlerPath);
+    const event = this.getEvent(node, eventHandlerPath);
     const EventHandlerClass = getDeep(
       this.eventHandlerClasses,
-      eventData.handlerPathSegments,
+      event.handlerPathSegments,
     );
     const eventHandlerInstance = new EventHandlerClass(this);
     const eventHandler = (e) => eventHandlerInstance.handle(e);
-    setDeep(this.eventHandlers, eventData.handlerPathSegments, eventHandler);
-    node.addEventListener(eventData.type, eventHandler);
+    setDeep(this.eventHandlers, event.handlerPathSegments, eventHandler);
+    node.addEventListener(event.type, eventHandler);
     return this;
   }
   unsetEventListener(node, eventHandlerPath) {
-    const eventData = this.getEventData(node, eventHandlerPath);
-    const eventHandler = getDeep(
-      this.eventHandlers,
-      eventData.handlerPathSegments,
-    );
-    node.removeEventListener(eventData.type, eventHandler);
+    const event = this.getEvent(node, eventHandlerPath);
+    const eventHandler = getDeep(this.eventHandlers, event.handlerPathSegments);
+    node.removeEventListener(event.type, eventHandler);
     return this;
   }
 }
