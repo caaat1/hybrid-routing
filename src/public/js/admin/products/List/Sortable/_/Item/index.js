@@ -82,15 +82,14 @@ export default class Item {
 }
 function getDeep(obj, path) {
   let current = obj;
-
-  for (let key of path) {
+  let pathSegments = path.slice();
+  for (let key of pathSegments) {
     if (current == null || !(key in current)) {
       return undefined; // Return undefined if path is broken
     }
     current = current[key];
   }
-
-  return current; // Return the final value
+  return current;
 }
 // function isClass(value) {
 //   try {
@@ -102,14 +101,13 @@ function getDeep(obj, path) {
 // }
 function setDeep(obj, path, value) {
   let current = obj;
-  let lastKey = path.pop(); // Extract the last key to set the value later
-
-  for (let key of path) {
+  const lastKey = path.at(-1);
+  const pathSegments = path.slice(0, -1);
+  for (let key of pathSegments) {
     if (!(key in current) || typeof current[key] !== 'object') {
-      current[key] = {}; // Ensure intermediate objects exist
+      current[key] = {}; // Create missing objects
     }
     current = current[key]; // Move deeper
   }
-
-  current[lastKey] = value; // Set the final value
+  current[lastKey] = value; // ✅ Modifies the actual object!
 }
