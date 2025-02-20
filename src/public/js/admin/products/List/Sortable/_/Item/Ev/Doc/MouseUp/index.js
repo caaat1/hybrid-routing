@@ -1,15 +1,10 @@
 import DocEvent from '../index.js';
 
 export default class MouseUp extends DocEvent {
-  handle(e) {
+  handle = (e) => {
     console.log('MouseUp');
-    document.removeEventListener(
-      'mousemove',
-      this.sortableList_item.eventHandler.doc.mouseMove,
-    );
-    document.removeEventListener(
-      'mouseup',
-      this.sortableList_item.eventHandler.doc.mouseUp,
-    );
-  }
+    this.sortableList_item
+      .unsetEventListener(document, 'mousemove')
+      .unsetEventListener(document, 'mouseup');
+  };
 }

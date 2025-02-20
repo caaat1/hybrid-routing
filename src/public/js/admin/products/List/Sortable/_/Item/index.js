@@ -1,7 +1,9 @@
-import MouseMove from './Ev/Doc/MouseMove/index.js';
+import AfterDragStart from './Ev/Doc/MouseMove/AfterDragStart/index.js';
+import BeforeDragStart from './Ev/Doc/MouseMove/BeforeDragStart/index.js';
 import MouseUp from './Ev/Doc/MouseUp/index.js';
 import MouseDown from './Ev/El/MouseDown/index.js';
 import TransitionEnd from './Ev/El/TransitionEnd/index.js';
+import TransitionRun from './Ev/El/TransitionRun/index.js';
 import TransitionStart from './Ev/El/TransitionStart/index.js';
 
 export default class Item {
@@ -14,51 +16,101 @@ export default class Item {
   };
   drag;
   el;
-  eventHandler;
+  eventHandlerClasses = {
+    [Node.DOCUMENT_NODE]: {
+      mousemove: {
+        beforeDragStart: BeforeDragStart,
+        afterDragStart: AfterDragStart,
+      },
+      mouseup: MouseUp,
+    },
+    [Node.ELEMENT_NODE]: {
+      mousedown: MouseDown,
+      transitionend: TransitionEnd,
+      transitionrun: TransitionRun,
+      transitionstart: TransitionStart,
+    },
+  };
+  eventHandlers = {
+    [Node.DOCUMENT_NODE]: {
+      mousemove: {
+        beforeDragStart: undefined,
+        afterDragStart: undefined,
+      },
+      mouseup: undefined,
+    },
+    [Node.ELEMENT_NODE]: {
+      mousedown: undefined,
+      transitionend: undefined,
+      transitionrun: undefined,
+      transitionstart: undefined,
+    },
+  };
   isTransitionEnded = true;
+
   constructor(el) {
     this.el = el;
-    this.eventHandlerObj = {
-      doc: {
-        mouseMove: new MouseMove(this),
-        mouseUp: new MouseUp(this),
-      },
-      el: {
-        mouseDown: new MouseDown(this),
-        transitionEnd: new TransitionEnd(this),
-        transitionStart: new TransitionStart(this),
-      },
-    };
-    this.eventHandler = {
-      doc: {
-        mouseMove: (e) => this.eventHandlerObj.doc.mouseMove.handle(e),
-        mouseUp: (e) => this.eventHandlerObj.doc.mouseUp.handle(e),
-      },
-      el: {
-        mouseDown: (e) => this.eventHandlerObj.el.mouseDown.handle(e),
-        transitionEnd: (e) => this.eventHandlerObj.el.transitionEnd.handle(e),
-        transitionStart: (e) =>
-          this.eventHandlerObj.el.transitionStart.handle(e),
-      },
-    };
-    this.addStyles();
-    this.addEventListeners();
+    this.addStyles().addEventListeners();
   }
+
+  addEventListeners() {
+    this.setEventListener(this.el, 'mousedown')
+      .setEventListener(this.el, 'transitionend')
+      .setEventListener(this.el, 'transitionstart');
+    return this;
+  }
+
   addStyles() {
     this.el.classList.add(this.CSSClass.animated);
+    return this;
   }
-  addEventListeners() {
-    this.el.addEventListener('mousedown', this.eventHandler.el.mouseDown);
-    this.el.addEventListener(
-      'transitionend',
-      this.eventHandler.el.transitionEnd,
-    );
-    this.el.addEventListener(
-      'transitionstart',
-      this.eventHandler.el.transitionStart,
-    );
-  }
+
   isGrabbable(e) {
     return this.isTransitionEnded && e.which < 2;
+  }
+
+  setEventListener(node, eventType, tag = null /* , args */) {
+    const nodeType = node.nodeType;
+    const nodeTypeHandlers = this.eventHandlerClasses[nodeType];
+    if (undefined === nodeTypeHandlers) {
+      throw new Error(`Handlers for node type of ${nodeType} are not defined`);
+    }
+    const ClassRef = nodeTypeHandlers[eventType];
+    if (undefined === ClassRef) {
+      throw new Error(
+        `Handlers for event type of ${eventType} are not defined`,
+      );
+    }
+    const eventHandlerObj = new ClassRef(this);
+    const eventHandler = (e) => eventHandlerObj.handle(e);
+    if (tag) {
+      if (this.eventHandlers[nodeType][eventType]) {
+        this.eventHandlers[nodeType][eventType][tag] = eventHandler;
+      } else {
+        this.eventHandlers[nodeType][eventType] = {};
+        this.eventHandlers[nodeType][eventType][tag] = eventHandler;
+      }
+    } else {
+      this.eventHandlers[nodeType][eventType] = eventHandler;
+      node.addEventListener(eventType, eventHandler);
+    }
+    return this;
+  }
+  unsetEventListener(node, eventType, tag = null /* , args */) {
+    const nodeType = node.nodeType;
+    const nodeTypeHandlers = this.eventHandlers[nodeType];
+    if (undefined === nodeTypeHandlers) {
+      throw new Error(
+        `Handlers for node type of ${nodeType} have not been set`,
+      );
+    }
+    const eventHandler = nodeTypeHandlers[eventType];
+    if (undefined === eventHandler) {
+      throw new Error(
+        `Handlers for event type of ${eventType} have not been set`,
+      );
+    }
+    node.removeEventListener(eventType, eventHandler, tag);
+    return this;
   }
 }
