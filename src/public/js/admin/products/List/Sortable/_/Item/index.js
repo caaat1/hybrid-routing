@@ -31,24 +31,27 @@ export default class Item {
   };
   eventHandlers = {};
   isTransitionEnded = true;
-
   constructor(el) {
     this.el = el;
+    this.eventHandlers = this.mapEventHandlerClasses(
+      this.eventHandlerClasses,
+      (Class) => {
+        const instance = new Class(this);
+        return (e) => instance.handle(e);
+      },
+    );
     this.addStyles().addEventListeners();
   }
-
   addEventListeners() {
     this.setEventListener(this.el, 'mousedown')
       .setEventListener(this.el, 'transitionend')
       .setEventListener(this.el, 'transitionstart');
     return this;
   }
-
   addStyles() {
     this.el.classList.add(this.CSSClass.animated);
     return this;
   }
-
   isGrabbable(e) {
     return this.isTransitionEnded && e.which < 2;
   }
@@ -61,15 +64,29 @@ export default class Item {
       handlerPathSegments: eventHandlerPathSegments,
     };
   }
+  mapEventHandlerClasses(obj, transform) {
+    const result = {}; // Preserve array/object structure
+    for (const key in obj) {
+      if (Object.hasOwn(obj, key)) {
+        const value = obj[key];
+
+        if (typeof value === 'object' && value !== null) {
+          // If the value is an object, recurse
+          result[key] = this.mapEventHandlerClasses(value, transform);
+        } else if (typeof value === 'function') {
+          // If the value is a class (function), apply the transformation
+          result[key] = transform(value);
+        } else {
+          // Preserve non-class leaf values as they are
+          result[key] = value;
+        }
+      }
+    }
+    return result;
+  }
   setEventListener(node, eventHandlerPath) {
     const event = this.getEvent(node, eventHandlerPath);
-    const EventHandlerClass = getDeep(
-      this.eventHandlerClasses,
-      event.handlerPathSegments,
-    );
-    const eventHandlerInstance = new EventHandlerClass(this);
-    const eventHandler = (e) => eventHandlerInstance.handle(e);
-    setDeep(this.eventHandlers, event.handlerPathSegments, eventHandler);
+    const eventHandler = getDeep(this.eventHandlers, event.handlerPathSegments);
     node.addEventListener(event.type, eventHandler);
     return this;
   }
@@ -99,15 +116,30 @@ function getDeep(obj, path) {
 //     return false;
 //   }
 // }
-function setDeep(obj, path, value) {
-  let current = obj;
-  const lastKey = path.at(-1);
-  const pathSegments = path.slice(0, -1);
-  for (let key of pathSegments) {
-    if (!(key in current) || typeof current[key] !== 'object') {
-      current[key] = {}; // Create missing objects
-    }
-    current = current[key]; // Move deeper
-  }
-  current[lastKey] = value; // ✅ Modifies the actual object!
-}
+// function iterateObject(obj, callback) {
+//   // Iterate over each property in the object
+//   for (const key in obj) {
+//     if (Object.hasOwn(obj, key)) {
+//       // Check if the value is an object (and not null)
+//       if (typeof obj[key] === 'object' && obj[key] !== null) {
+//         // If it's an object, recursively call iterateObject on it
+//         iterateObject(obj[key], callback);
+//       } else {
+//         // If it's not an object, call the callback with the key and value
+//         callback(key, obj[key]);
+//       }
+//     }
+//   }
+// }
+// function setDeep(obj, path, value) {
+//   let current = obj;
+//   const lastKey = path.at(-1);
+//   const pathSegments = path.slice(0, -1);
+//   for (let key of pathSegments) {
+//     if (!(key in current) || typeof current[key] !== 'object') {
+//       current[key] = {}; // Create missing objects
+//     }
+//     current = current[key]; // Move deeper
+//   }
+//   current[lastKey] = value; // ✅ Modifies the actual object!
+// }
