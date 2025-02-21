@@ -8,6 +8,7 @@ export default class Drag {
   constructor(mouseDownElementEvent, e) {
     this.sortList_item = mouseDownElementEvent.sortList_item;
     this.e.mouseDown = e;
+    // console.log('new Drag', this);
   }
   getOffset(e) {
     return (

@@ -1,19 +1,14 @@
-import MouseMove from '../index.js';
+import DragStart from '../index.js';
 
-export default class DragStart extends MouseMove {
-  after = (e) => {
-    if (this.sortableList_item.drag) {
-      console.log('there!');
-      return;
-    }
-    console.log('switched to "before"');
-    this.handle = this.before;
-  };
-  before = (e) => {
+export default class Before extends DragStart {
+  handle = (e) => {
     console.log('here!');
     if (this.sortableList_item.drag.isToleranceExceeded(e)) {
       // this.el.classList.add(this.CSSClass.pulled);
-      this.handle = this.after;
+      this.sortableList_item
+        .eventListenerOn(document)
+        .unset('mousemove.dragStart.before')
+        .set('mousemove.dragStart.after');
       this.sortableList_item.el.classList.remove(
         this.sortableList_item.CSSClass.animated,
         this.sortableList_item.CSSClass.grabbed,
@@ -25,5 +20,4 @@ export default class DragStart extends MouseMove {
       // this.incrementZIndex();
     }
   };
-  handle = this.before;
 }

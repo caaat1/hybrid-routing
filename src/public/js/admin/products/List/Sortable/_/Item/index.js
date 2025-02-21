@@ -1,4 +1,5 @@
-import DragStart from './Ev/Doc/MouseMove/DragStart/index.js';
+import After from './Ev/Doc/MouseMove/DragStart/After/index.js';
+import Before from './Ev/Doc/MouseMove/DragStart/Before/index.js';
 import MouseUp from './Ev/Doc/MouseUp/index.js';
 import MouseDown from './Ev/El/MouseDown/index.js';
 import TransitionEnd from './Ev/El/TransitionEnd/index.js';
@@ -24,7 +25,6 @@ export default class Item {
     this.addStyles().addEventListeners();
   }
   addEventListeners() {
-    console.log(this.eventListener);
     this.eventListenerOn(this.el)
       .set('mousedown')
       .set('transitionend')
@@ -63,7 +63,10 @@ class EventListener {
     })({
       [Node.DOCUMENT_NODE]: {
         mousemove: {
-          dragStart: DragStart,
+          dragStart: {
+            after: After,
+            before: Before,
+          },
         },
         mouseup: MouseUp,
       },
