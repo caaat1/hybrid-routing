@@ -1,14 +1,16 @@
+import toPx from '../../../../../toPx/index.js';
+
 export default class Drag {
   e = {
     dragStart: undefined,
     mouseDown: undefined,
   };
-  tolerance = 400;
-  sortList_item;
+  tolerance = 40;
+  sortableList_item;
   constructor(mouseDownElementEvent, e) {
-    this.sortList_item = mouseDownElementEvent.sortList_item;
+    this.sortableList_item = mouseDownElementEvent.sortableList_item;
     this.e.mouseDown = e;
-    // console.log('new Drag', this);
+    console.log('new Drag', mouseDownElementEvent);
   }
   getOffset(e) {
     return (
@@ -22,5 +24,16 @@ export default class Drag {
       this.e.dragStart = e;
     }
     return result;
+  }
+  rerender(e) {
+    const dX = toPx(e.pageX - this.e.dragStart.pageX);
+    const dY = toPx(e.pageY - this.e.dragStart.pageY);
+    this.sortableList_item.el.style.transform = `translate(${dX}, ${dY})`;
+  }
+  resetOffset() {
+    this.sortableList_item.el.style.transform = 'none';
+  }
+  resetProperties() {
+    this.sortableList_item.el.style.removeProperty('transform');
   }
 }

@@ -22,12 +22,13 @@
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).animated {
   transition-duration: 2s;
-  transition-property: left, top;
+  transition-property: transform;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged,
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged:hover {
   background: hsl(192, 100%, 50%, 0.99);
   cursor: move;
+  z-index: 1;
 }
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).grabbed {
   background: hsl(220, 100%, 90%, 0.99);
@@ -38,8 +39,14 @@
   background: hsla(0, 50%, 50%, 0.5);
   cursor: auto;
 }
+/* [data-xpath^='body/main/div']:not([data-xpath*=']/div']).pulled,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).pulled:hover {
+  background: hsla(30, 50%, 50%, 0.5);
+  cursor: auto;
+} */
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).released,
 [data-xpath^='body/main/div']:not([data-xpath*=']/div']).released:hover {
   background: hsla(30, 50%, 50%, 0.5);
   cursor: auto;
+  transform: none;
 }

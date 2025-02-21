@@ -4,10 +4,7 @@ import DocEvent from '../index.js';
 export default class MouseUp extends DocEvent {
   handle = (e) => {
     console.log('MouseUp');
-    this.sortableList_item.drag = null;
-
-    console.log(this.sortableList_item);
-
+    this.sortableList_item.drag.resetOffset(); // Any use?
     this.sortableList_item.el.classList.remove(
       this.sortableList_item.CSSClass.dragged,
     );
