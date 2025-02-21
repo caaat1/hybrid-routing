@@ -8,8 +8,8 @@ export default class MouseDown extends ElementEvent {
         this.sortableList_item.CSSClass.grabbed,
       );
       this.sortableList_item.drag = new Drag(this, e);
-      this.sortableList_item.event
-        .listenerOn(document)
+      this.sortableList_item
+        .eventListenerOn(document)
         .set('mousemove.dragStart')
         .set('mouseup');
     }

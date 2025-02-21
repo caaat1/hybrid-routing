@@ -15,16 +15,17 @@ export default class Item {
   };
   drag;
   el;
-  event = {};
+  eventListenerOn = {};
   isTransitionEnded = true;
   constructor(el) {
     this.el = el;
-    this.event = new Event(this);
+    const eventListener = new EventListener(this);
+    this.eventListenerOn = eventListener.on.bind(eventListener);
     this.addStyles().addEventListeners();
   }
   addEventListeners() {
-    this.event
-      .listenerOn(this.el)
+    console.log(this.eventListener);
+    this.eventListenerOn(this.el)
       .set('mousedown')
       .set('transitionend')
       .set('transitionstart');
@@ -38,9 +39,9 @@ export default class Item {
     return this.isTransitionEnded && e.which < 2;
   }
 }
-class Event {
+class EventListener {
   constructor(item) {
-    this.handlers = new (class {
+    const handlers = new (class {
       constructor(handlerStructure) {
         for (const key in handlerStructure) {
           if (Object.hasOwn(handlerStructure, key)) {
@@ -73,36 +74,35 @@ class Event {
         transitionstart: TransitionStart,
       },
     });
-  }
-  listenerOn(node) {
-    return new (class {
-      set;
-      unset;
-      constructor(This, node) {
-        const getArgs = (handlerPath) => {
-          const nodeType = node.nodeType;
-          const handlerPathSegments = handlerPath.split('.');
-          const eventType = handlerPathSegments[0];
-          let current = This.handlers;
-          for (let key of [nodeType, ...handlerPathSegments]) {
-            if (current == null || !(key in current)) {
-              throw new Error(
-                `Invalid handler path: '${handlerPath}' at '${key}'`,
-              );
+    this.on = (node) =>
+      new (class {
+        set;
+        unset;
+        constructor(node) {
+          const getArgs = (handlerPath) => {
+            const nodeType = node.nodeType;
+            const handlerPathSegments = handlerPath.split('.');
+            const eventType = handlerPathSegments[0];
+            let current = handlers;
+            for (let key of [nodeType, ...handlerPathSegments]) {
+              if (current == null || !(key in current)) {
+                throw new Error(
+                  `Invalid handler path: '${handlerPath}' at '${key}'`,
+                );
+              }
+              current = current[key];
             }
-            current = current[key];
-          }
-          return [eventType, current];
-        };
-        this.set = (handlerPath) => {
-          node.addEventListener(...getArgs(handlerPath));
-          return this;
-        };
-        this.unset = (handlerPath) => {
-          node.removeEventListener(...getArgs(handlerPath));
-          return this;
-        };
-      }
-    })(this, node);
+            return [eventType, current];
+          };
+          this.set = (handlerPath) => {
+            node.addEventListener(...getArgs(handlerPath));
+            return this;
+          };
+          this.unset = (handlerPath) => {
+            node.removeEventListener(...getArgs(handlerPath));
+            return this;
+          };
+        }
+      })(node);
   }
 }
