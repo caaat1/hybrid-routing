@@ -15,32 +15,19 @@ export default class Item {
   };
   drag;
   el;
-  eventHandlerClasses = {
-    [Node.DOCUMENT_NODE]: {
-      mousemove: {
-        dragStart: DragStart,
-      },
-      mouseup: MouseUp,
-    },
-    [Node.ELEMENT_NODE]: {
-      mousedown: MouseDown,
-      transitionend: TransitionEnd,
-      transitionrun: TransitionRun,
-      transitionstart: TransitionStart,
-    },
-  };
   event = {};
   isTransitionEnded = true;
   constructor(el) {
     this.el = el;
-    // this.eventHandlers = Handlers.create(this);
     this.event = new Event(this);
     this.addStyles().addEventListeners();
   }
   addEventListeners() {
-    this.event.getListener(this.el, 'mousedown').add();
-    this.event.getListener(this.el, 'transitionend').add();
-    this.event.getListener(this.el, 'transitionstart').add();
+    this.event
+      .listenerOn(this.el)
+      .set('mousedown')
+      .set('transitionend')
+      .set('transitionstart');
     return this;
   }
   addStyles() {
@@ -53,18 +40,17 @@ export default class Item {
 }
 class Event {
   constructor(item) {
-    this.item = item;
     this.handlers = new (class {
-      constructor(obj) {
-        for (const key in obj) {
-          if (Object.hasOwn(obj, key)) {
-            const value = obj[key];
+      constructor(handlerStructure) {
+        for (const key in handlerStructure) {
+          if (Object.hasOwn(handlerStructure, key)) {
+            const value = handlerStructure[key];
             if (typeof value === 'object' && value !== null) {
               this[key] = new this.constructor(value);
             } else if (typeof value === 'function') {
               this[key] = this.transform(value);
             } else {
-              this[key] = value;
+              throw new Error('Invalid handler structure');
             }
           }
         }
@@ -73,47 +59,50 @@ class Event {
         const instance = new Class(item);
         return (e) => instance.handle(e);
       }
-    })(item.eventHandlerClasses);
+    })({
+      [Node.DOCUMENT_NODE]: {
+        mousemove: {
+          dragStart: DragStart,
+        },
+        mouseup: MouseUp,
+      },
+      [Node.ELEMENT_NODE]: {
+        mousedown: MouseDown,
+        transitionend: TransitionEnd,
+        transitionrun: TransitionRun,
+        transitionstart: TransitionStart,
+      },
+    });
   }
-  getListener(node, handlerPath) {
-    return new Listener(this.item, node, handlerPath);
-  }
-}
-class Listener {
-  constructor(item, node, handlerPath) {
-    this.item = item;
-    this.node = node;
-    this.handlerPath = handlerPath;
-  }
-  add() {
-    this.node.addEventListener(...this.getArgs());
-    return this;
-  }
-  getArgs() {
-    const nodeType = this.node.nodeType;
-    const handlerPathSegments = this.handlerPath.split('.');
-    const eventType = handlerPathSegments[0];
-    return [
-      eventType,
-      this.getDeep(this.item.event.handlers, [
-        nodeType,
-        ...handlerPathSegments,
-      ]),
-    ];
-  }
-  getDeep(obj, path) {
-    let current = obj;
-    let pathSegments = path.slice();
-    for (let key of pathSegments) {
-      if (current == null || !(key in current)) {
-        return undefined; // Return undefined if path is broken
+  listenerOn(node) {
+    return new (class {
+      set;
+      unset;
+      constructor(This, node) {
+        const getArgs = (handlerPath) => {
+          const nodeType = node.nodeType;
+          const handlerPathSegments = handlerPath.split('.');
+          const eventType = handlerPathSegments[0];
+          let current = This.handlers;
+          for (let key of [nodeType, ...handlerPathSegments]) {
+            if (current == null || !(key in current)) {
+              throw new Error(
+                `Invalid handler path: '${handlerPath}' at '${key}'`,
+              );
+            }
+            current = current[key];
+          }
+          return [eventType, current];
+        };
+        this.set = (handlerPath) => {
+          node.addEventListener(...getArgs(handlerPath));
+          return this;
+        };
+        this.unset = (handlerPath) => {
+          node.removeEventListener(...getArgs(handlerPath));
+          return this;
+        };
       }
-      current = current[key];
-    }
-    return current;
-  }
-  remove() {
-    this.node.removeEventListener(...this.getArgs());
-    return this;
+    })(this, node);
   }
 }
