@@ -1,4 +1,4 @@
-import {Listener} from '../../../index.js';
+// import {Listener} from '../../../index.js';
 import DocEvent from '../index.js';
 
 export default class MouseUp extends DocEvent {
@@ -7,8 +7,9 @@ export default class MouseUp extends DocEvent {
     // this.sortableList_item
     //   .unsetEventListener(document, 'mousemove.dragStart')
     //   .unsetEventListener(document, 'mouseup');
-    new Listener(this.sortableList_item)
-      .unset(document, 'mousemove.dragStart')
-      .unset(document, 'mouseup');
+    this.sortableList_item.event
+      .getListener(document, 'mousemove.dragStart')
+      .remove();
+    this.sortableList_item.event.getListener(document, 'mouseup').remove();
   };
 }

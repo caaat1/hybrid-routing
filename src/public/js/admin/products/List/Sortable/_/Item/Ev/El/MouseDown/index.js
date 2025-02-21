@@ -1,5 +1,5 @@
 import Drag from '../../../Drag/index.js';
-import {Listener} from '../../../index.js';
+// import {Listener} from '../../../index.js';
 import ElementEvent from '../index.js';
 
 export default class MouseDown extends ElementEvent {
@@ -13,9 +13,10 @@ export default class MouseDown extends ElementEvent {
       // this.sortableList_item
       //   .setEventListener(document, 'mousemove.dragStart')
       //   .setEventListener(document, 'mouseup');
-      new Listener(this.sortableList_item)
-        .set(document, 'mousemove.dragStart')
-        .set(document, 'mouseup');
+      this.sortableList_item.event
+        .getListener(document, 'mousemove.dragStart')
+        .add();
+      this.sortableList_item.event.getListener(document, 'mouseup').add();
     }
   };
 }
