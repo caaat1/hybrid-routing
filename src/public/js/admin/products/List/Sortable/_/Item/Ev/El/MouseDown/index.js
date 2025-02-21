@@ -1,4 +1,4 @@
-import Drag from '../../../Drag/index.js';
+import Drag from '../../../Drag/Transform/index.js';
 import ElementEvent from '../index.js';
 
 export default class MouseDown extends ElementEvent {
