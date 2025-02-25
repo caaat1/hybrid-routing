@@ -1,14 +1,12 @@
 {
   "folders": [
     {
-      "path": ".",
+      "path": "."
     },
   ],
   "settings": {
     "files.autoSave": "afterDelay",
     "peacock.color": "#42b883",
-    "window.commandCenter": true,
-    "window.title": "${activeRepositoryName}${separator}${activeRepositoryBranchName}",
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#65c89b",
       "activityBar.background": "#65c89b",
@@ -17,17 +15,26 @@
       "activityBarBadge.background": "#945bc4",
       "activityBarBadge.foreground": "#e7e7e7",
       "commandCenter.border": "#15202b99",
+      "editorGroupHeader.border": "#00ff00ff",
+      "editorGroupHeader.tabsBackground": "#333333ff",
+      "editorGroupHeader.tabsBorder": "#0F6C8C",
+      "folderPathColor.custom1": "#e9aad5",
+      "folderPathColor.custom2": "#c682b2",
+      "folderPathColor.custom3": "#89af72",
+      "folderPathColor.custom4": "#7b9ad0",
       "sash.hoverBorder": "#65c89b",
       "statusBar.background": "#42b883",
       "statusBar.foreground": "#15202b",
       "statusBarItem.hoverBackground": "#359268",
       "statusBarItem.remoteBackground": "#42b883",
       "statusBarItem.remoteForeground": "#15202b",
-      "tab.activeBackground": "#333333ff",
+      "tab.activeBackground": "#00ff0055",
+      "tab.inactiveBackground": "#333333ff",
+      "tab.unfocusedActiveBackground": "#004400",
       "titleBar.activeBackground": "#42b883",
       "titleBar.activeForeground": "#15202b",
       "titleBar.inactiveBackground": "#42b88399",
       "titleBar.inactiveForeground": "#15202b99"
-    },
-  },
+    }
+  }
 }
