@@ -1,0 +1,52 @@
+[data-xpath='body/main'] {
+  background-color: hsl(192, 100%, 30%, 0.5);
+  border-radius: 0.5em;
+  margin: auto;
+  padding: 1em;
+  width: 50vw;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']) {
+  background-color: hsl(0, 0%, 93%, 0.5);
+  border-color: hsl(192, 100%, 30%, 0.75);
+  border-radius: 0.25em;
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  margin: 1em;
+  padding: 1em;
+  position: relative;
+  text-align: center;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']):hover {
+  background: hsl(60, 100%, 90%, 0.5);
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).animated {
+  transition-duration: 2s;
+  transition-property: transform;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).dragged:hover {
+  background: hsl(192, 100%, 50%, 0.99);
+  cursor: move;
+  z-index: 1;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).grabbed {
+  background: hsl(220, 100%, 90%, 0.99);
+  cursor: move;
+}
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).moving,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).moving:hover {
+  background: hsla(0, 50%, 50%, 0.5);
+  cursor: auto;
+}
+/* [data-xpath^='body/main/div']:not([data-xpath*=']/div']).pulled,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).pulled:hover {
+  background: hsla(30, 50%, 50%, 0.5);
+  cursor: auto;
+} */
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).released,
+[data-xpath^='body/main/div']:not([data-xpath*=']/div']).released:hover {
+  background: hsla(30, 50%, 50%, 0.5);
+  cursor: auto;
+  transform: none;
+}

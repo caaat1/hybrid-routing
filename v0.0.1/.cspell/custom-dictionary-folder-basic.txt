@@ -1,0 +1,6 @@
+# Custom Dictionary Words
+bitfield
+bson
+dotenv
+mpath
+mquery
