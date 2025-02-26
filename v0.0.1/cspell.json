@@ -1,8 +1,17 @@
 {
-  "version": "0.2",
-  "ignorePaths": [],
-  "dictionaryDefinitions": [],
   "dictionaries": [],
+  "dictionaryDefinitions": [],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".git/**",
+    "public/**"
+  ],
+  "ignoreWords": [],
+  "import": [],
+  "language": "en",
+  "version": "0.2",
   "words": [
     "chownr",
     "depd",
@@ -31,7 +40,5 @@
     "whatwg",
     "wrappy",
     "yallist"
-  ],
-  "ignoreWords": [],
-  "import": []
+  ]
 }

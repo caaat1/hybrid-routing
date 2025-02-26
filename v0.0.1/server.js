@@ -1,10 +1,12 @@
-import app from './src/app.js';
-import connectToDatabase from './src/config/db.js'; // Ensure this is a function that connects to the DB
+// server.js
+
+import app from './src/app.ts';
+import connectToDB from './src/config/db.ts'; // Ensure this is a function that connects to the DB
 
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
-connectToDatabase(); // Call the function to connect to the database
+connectToDB(); // Call the function to connect to the database
 
 // Start the server
 app.listen(PORT, () => {

@@ -1,9 +1,9 @@
 {
   "cSpell.customDictionaries": {
-    "custom-dictionary-folder-basic": {
+    "custom-dictionary-folder": {
       "addWords": true,
-      "name": "custom-dictionary-folder-basic",
-      "path": "${workspaceFolder:basic}/.cspell/custom-dictionary-folder-basic.txt",
+      "name": "custom-dictionary-folder",
+      "path": "${workspaceFolder}/.cspell/custom-dictionary-folder.txt",
       "scope": "folder"
     }
   },
