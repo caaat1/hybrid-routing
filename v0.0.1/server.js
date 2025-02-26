@@ -1,7 +1,7 @@
 // server.js
 
-import app from './src/app.ts';
-import connectToDB from './src/config/db.ts'; // Ensure this is a function that connects to the DB
+import app from './dist/app.js';
+import connectToDB from './dist/config/db.js'; // Ensure this is a function that connects to the DB
 
 const PORT = process.env.PORT || 3000;
 
