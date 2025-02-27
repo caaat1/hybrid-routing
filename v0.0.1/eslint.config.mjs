@@ -1,10 +1,10 @@
-import js from '@eslint/js'
-import ts from '@typescript-eslint/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
-import prettier from 'eslint-config-prettier'
-import importPlugin from 'eslint-plugin-import'
-import prettierPlugin from 'eslint-plugin-prettier'
-import globals from 'globals'
+import js from '@eslint/js';
+import ts from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import prettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
+import prettierPlugin from 'eslint-plugin-prettier';
+import globals from 'globals';
 
 export default [
   // Base JavaScript rules
@@ -38,6 +38,13 @@ export default [
     plugins: {
       import: importPlugin,
     },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.ts', '.mjs', '.cjs'],
+        },
+      },
+    },
     rules: {
       'import/order': [
         'error',
@@ -63,6 +70,8 @@ export default [
         {
           js: 'never',
           jsx: 'never',
+          ts: 'never',
+          tsx: 'never',
         },
       ],
     },
@@ -94,4 +103,4 @@ export default [
       'linebreak-style': ['error', 'unix'],
     },
   },
-]
+];
