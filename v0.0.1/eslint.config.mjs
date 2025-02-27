@@ -1,42 +1,44 @@
+import js from '@eslint/js'
+import ts from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
+import prettier from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
+import prettierPlugin from 'eslint-plugin-prettier'
+import globals from 'globals'
+
 export default [
+  // Base JavaScript rules
+  js.configs.recommended,
+
+  // TypeScript rules with type information enabled
   {
-    extends: [
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:@typescript-eslint/recommended-requiring-type-checking',
-      'plugin:import/errors',
-      'plugin:import/warnings',
-      'plugin:import/typescript',
-      'plugin:prettier/recommended', // Integrates Prettier with ESLint
-    ],
-    files: ['*.ts', '*.tsx'], // Applies to TypeScript files
-    parser: '@typescript-eslint/parser', // Use TypeScript parser
-    parserOptions: {
-      ecmaVersion: 'latest', // Use the latest ECMAScript version
-      sourceType: 'module', // Use ES modules
-      project: './tsconfig.json', // Point to your tsconfig.json
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: './tsconfig.json', // Enables type-aware linting
+      },
     },
-    plugins: ['@typescript-eslint', 'import', 'prettier'],
+    plugins: {
+      '@typescript-eslint': ts,
+    },
     rules: {
-      // Strict TypeScript rules
-      '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'warn',
-      '@typescript-eslint/explicit-module-boundary-types': 'warn',
-      '@typescript-eslint/no-empty-function': 'warn',
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-namespace': 'error',
-      '@typescript-eslint/no-unused-expressions': 'error',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      ...ts.configs.recommended.rules,
+      ...ts.configs['recommended-requiring-type-checking'].rules, // Enables stricter type-based rules
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
 
-      // Disable conflicting base rules
-      'no-unused-vars': 'off',
-
-      // General ESLint rules
-      eqeqeq: ['error', 'always'],
-      'no-console': 'warn',
-      strict: ['error', 'global'],
-
-      // Import sorting
+  // Import sorting and organization
+  {
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
       'import/order': [
         'error',
         {
@@ -44,25 +46,52 @@ export default [
             'builtin',
             'external',
             'internal',
-            ['parent', 'sibling', 'index'],
+            'parent',
+            'sibling',
+            'index',
           ],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
         },
       ],
-
-      // Formatting and empty line rules
-      'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1, maxEOF: 1 }],
-
-      // Prettier integration
-      'prettier/prettier': ['error', { singleQuote: true, semi: false }],
-    },
-    settings: {
-      'import/resolver': {
-        typescript: {
-          alwaysTryTypes: true, // Always try to resolve types
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          js: 'never',
+          jsx: 'never',
         },
-      },
+      ],
     },
   },
-];
+
+  // Prettier integration
+  {
+    plugins: {
+      prettier: prettierPlugin,
+    },
+    rules: {
+      ...prettier.rules,
+      'prettier/prettier': 'error',
+    },
+  },
+
+  // Additional project-specific rules
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    rules: {
+      'arrow-body-style': ['error', 'as-needed'],
+      'consistent-return': 'error',
+      'no-unused-vars': 'warn',
+      'linebreak-style': ['error', 'unix'],
+    },
+  },
+]
