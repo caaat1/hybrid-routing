@@ -1,9 +1,7 @@
 import js from '@eslint/js';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
-import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
 
 export default [
@@ -74,17 +72,6 @@ export default [
           tsx: 'never',
         },
       ],
-    },
-  },
-
-  // Prettier integration
-  {
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      ...prettier.rules,
-      'prettier/prettier': 'error',
     },
   },
 
