@@ -1,18 +1,15 @@
 import path from 'path';
 import {fileURLToPath} from 'url';
-
 import bodyParser from 'body-parser';
 import MongoStore from 'connect-mongo';
+import debug from 'debug';
 import dotenv from 'dotenv';
 import express from 'express';
+import {Request, Response} from 'express';
 import session from 'express-session';
-
 import adminRouter from './routes/admin/index.js';
 import authRouter from './routes/auth/index.js';
 import indexRouter from './routes/index.js';
-import {Request, Response} from 'express';
-
-import debug from 'debug';
 
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);

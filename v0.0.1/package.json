@@ -1,52 +1,38 @@
 {
   "author": "",
   "dependencies": {
-    "@types/mongoose": "^5.11.97",
-    "bcrypt": "^5.1.1",
+    "@types/express": "^5.0.0",
+    "body-parser": "^1.20.3",
     "connect-mongo": "^5.1.0",
     "debug": "^4.4.0",
     "dotenv": "^16.4.7",
-    "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "express-session": "^1.18.1",
-    "mongoose": "^8.9.6",
-    "nodemon": "^3.1.9"
+    "express-session": "^1.18.1"
   },
   "description": "This is a hybrid web app that combines server-side rendering with client-side routing.",
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/debug": "^4.1.12",
-    "@types/express": "^5.0.0",
+    "@types/dotenv": "^6.1.1",
     "@types/express-session": "^1.18.1",
-    "@types/node": "^22.13.1",
-    "@typescript-eslint/eslint-plugin": "^8.23.0",
-    "@typescript-eslint/parser": "^8.24.1",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-define-config": "^2.1.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-prettier": "^5.2.3",
-    "prettier-eslint": "^16.3.0",
-    "ts-loader": "^9.5.2",
+    "@types/node": "^22.13.5",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^9.21.0",
+    "prettier": "^3.5.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
-    "webpack": "^5.98.0",
-    "webpack-cli": "^6.0.1"
+    "typescript": "^5.7.3"
   },
   "directories": {
     "test": "test"
   },
   "keywords": [],
   "license": "ISC",
-  "main": "eslint.config.js",
-  "name": "hybrid-routing",
+  "main": "server.js",
+  "name": "v0.0.1",
   "scripts": {
-    "-build": "webpack",
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig.views.json",
-    "start": "nodemon",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "version": "1.0.0"
 }
