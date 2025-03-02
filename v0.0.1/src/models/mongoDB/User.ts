@@ -1,33 +1,36 @@
 // src\models\mongoDB\User.ts
 
-import bcrypt from 'bcrypt';
-import {Schema, Document, model} from 'mongoose';
+import bcrypt from 'bcrypt'
+import {Schema, model, type Document} from 'mongoose'
 
 // Define an interface representing a user document in MongoDB
 export interface IUser extends Document {
-  username: string;
-  passwordHash: string;
-  comparePassword(password: string): Promise<boolean>;
+  username: string
+  password: string
+  passwordHash: string
+  comparePassword(_password: string): Promise<boolean>
 }
 
 const userSchema: Schema<IUser> = new Schema({
   username: {type: String, required: true, unique: true},
   passwordHash: {type: String, required: true},
-});
+})
 
 // Pre-save hook to hash the password before saving
 userSchema.pre<IUser>('save', async function (next) {
   if (this.isModified('passwordHash') || this.isNew) {
-    this.passwordHash = await bcrypt.hash(this.passwordHash, 10);
+    const hashedPassword = await bcrypt.hash(this.passwordHash, 10)
+    this.passwordHash = hashedPassword
   }
-  next();
-});
+  next()
+})
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function (
+  this: IUser,
   password: string,
 ): Promise<boolean> {
-  return await bcrypt.compare(password, this.passwordHash);
-};
+  return bcrypt.compare(password, this.passwordHash)
+}
 
-export const User = model<IUser>('User', userSchema);
+export const User = model<IUser>('User', userSchema)

@@ -1,6 +1,6 @@
 // src/models/mongoDB/Product.ts
 
-import {Schema, model} from 'mongoose';
+import {Schema, model} from 'mongoose'
 
 const ProductSchema = new Schema({
   name: {
@@ -18,6 +18,6 @@ const ProductSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+})
 
-export default model('Product', ProductSchema);
+export default model('Product', ProductSchema)

@@ -18,5 +18,6 @@
   ],
   "files.exclude": {
     "**/.git": false
-  }
+  },
+  "terminal.integrated.cwd": "${fileDirname}",
 }

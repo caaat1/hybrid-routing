@@ -1,14 +1,14 @@
 // src/middleware/auth/index.ts
 
-import {Request, Response, NextFunction} from 'express';
+import type {Request, Response, NextFunction} from 'express'
 
 export default function isAuthenticated(
   req: Request,
   res: Response,
   next: NextFunction,
-) {
-  if (req.session.user) {
-    return next();
+): void {
+  if (null !== req.session.user) {
+    return next()
   }
-  return res.redirect('/login');
+  return res.redirect('/login')
 }
