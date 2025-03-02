@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		"label": "eslint: lint src folder",
+		"type": "shell",
+		"command": "npx eslint src --fix", // Lint only the src folder
+		"problemMatcher": ["$eslint-stylish"],
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
+		},
+		"options": {
+		  "cwd": "${workspaceFolder}" // Ensure the command runs in the workspace root
+		}
+	  }
+	]
+  }

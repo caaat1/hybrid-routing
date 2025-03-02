@@ -7,8 +7,9 @@ export default function isAuthenticated(
   res: Response,
   next: NextFunction,
 ): void {
-  if (null !== req.session.user) {
-    return next()
+  if (req.session.user !== null) {
+    next()
+    return
   }
-  return res.redirect('/login')
+  res.redirect('/login')
 }

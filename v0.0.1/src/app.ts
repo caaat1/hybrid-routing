@@ -50,12 +50,21 @@ export default app
 
 // Named function for session middleware
 function sessionMiddleware(sessionOptions = {}): express.RequestHandler {
+  const HOURS_IN_A_DAY = 24
+  const MINUTES_IN_AN_HOUR = 60
+  const SECONDS_IN_A_MINUTE = 60
+  const MILLISECONDS_IN_A_SECOND = 1000
+  const ONE_DAY_IN_MS =
+    HOURS_IN_A_DAY *
+    MINUTES_IN_AN_HOUR *
+    SECONDS_IN_A_MINUTE *
+    MILLISECONDS_IN_A_SECOND
   const defaultOptions = {
     secret: process.env.SESSION_SECRET ?? 'default_secret',
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
-    cookie: {maxAge: 24 * 60 * 60 * 1000}, // 1 day
+    cookie: {maxAge: ONE_DAY_IN_MS}, // 1 day
   }
   return session({...defaultOptions, ...sessionOptions})
 }
@@ -65,7 +74,8 @@ function handle404(req: Request, res: Response): void {
   const log404 = debug('app:404')
   log404(`404 - ${req.originalUrl} not found`)
 
-  res.status(404).render('404', {
+  const HTTP_STATUS_NOT_FOUND = 404
+  res.status(HTTP_STATUS_NOT_FOUND).render('404', {
     title: 'Page Not Found',
     message: `The requested URL ${req.originalUrl} was not found on this server.`,
   })

@@ -6,6 +6,7 @@ import type {Request, Response} from 'express'
 import isAuthenticated from '../../middleware/auth/index.js'
 import Product from '../../models/mongoDB/Product.js'
 
+const SERVER_ERROR_STATUS = 500
 function handleAdminDashboard(_: Request, res: Response): void {
   res.render('admin', {title: 'Admin Dashboard'})
 }
@@ -16,7 +17,7 @@ async function handleGetProducts(_: Request, res: Response): Promise<void> {
     res.render('admin/products', {products})
   } catch (err) {
     console.error(err)
-    res.status(500).send('Server Error')
+    res.status(SERVER_ERROR_STATUS).send('Server Error')
   }
 }
 
@@ -37,7 +38,7 @@ async function handleCreateProduct(
     res.redirect('/admin/products')
   } catch (err) {
     console.error(err)
-    res.status(500).send('Server Error')
+    res.status(SERVER_ERROR_STATUS).send('Server Error')
   }
 }
 
@@ -51,7 +52,7 @@ async function handleEditProduct(req: Request, res: Response): Promise<void> {
     res.render('admin/edit-product', {product})
   } catch (err) {
     console.error(err)
-    res.status(500).send('Server Error')
+    res.status(SERVER_ERROR_STATUS).send('Server Error')
   }
 }
 
@@ -69,7 +70,7 @@ async function handleUpdateProduct(
     res.redirect('/admin/products')
   } catch (err) {
     console.error(err)
-    res.status(500).send('Server Error')
+    res.status(SERVER_ERROR_STATUS).send('Server Error')
   }
 }
 

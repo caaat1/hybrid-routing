@@ -16,10 +16,13 @@ const userSchema: Schema<IUser> = new Schema({
   passwordHash: {type: String, required: true},
 })
 
+// Define a constant for the salt rounds
+const SALT_ROUNDS = 10
+
 // Pre-save hook to hash the password before saving
 userSchema.pre<IUser>('save', async function (next) {
   if (this.isModified('passwordHash') || this.isNew) {
-    const hashedPassword = await bcrypt.hash(this.passwordHash, 10)
+    const hashedPassword = await bcrypt.hash(this.passwordHash, SALT_ROUNDS)
     this.passwordHash = hashedPassword
   }
   next()

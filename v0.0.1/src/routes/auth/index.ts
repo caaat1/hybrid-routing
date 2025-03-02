@@ -33,11 +33,12 @@ async function handleLogin(
 
 function handleLogout(req: Request, res: Response): void {
   req.session.destroy((err) => {
-    if (null !== err) {
-      return res.redirect('/') // return early if there is an error
+    if (err !== null) {
+      res.redirect('/')
+      return // return early if there is an error
     }
     res.clearCookie('connect.sid') // clear the session cookie
-    return res.redirect('/login') // return response to redirect the user to the login page
+    res.redirect('/login') // return response to redirect the user to the login page
   })
 }
 
