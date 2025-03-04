@@ -1,5 +1,6 @@
 // server.js
 
+require('module-alias/register')
 import app from './dist/app.js'
 import connectToDB from './dist/config/db.js' // Ensure this is a function that connects to the DB
 

@@ -1,0 +1,40 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		"label": "lint",
+		"type": "shell",
+		"command": "npm run lint", // Run the lint script from package.json
+		"problemMatcher": ["$eslint-stylish"],
+		"group": {
+		  "kind": "build",
+		  "isDefault": false
+		},
+		"options": {
+		  "cwd": "${workspaceFolder}" // Ensure the command runs in the workspace root
+		}
+	  },
+	  {
+		"label": "build",
+		"type": "shell",
+		"command": "npm run build", // Run the build script from package.json
+		"problemMatcher": ["$tsc"],
+		"group": {
+		  "kind": "build",
+		  "isDefault": false
+		},
+		"options": {
+		  "cwd": "${workspaceFolder}" // Ensure the command runs in the workspace root
+		}
+	  },
+	  {
+		"label": "lint-and-build", // Compound task to run lint and build sequentially
+		"dependsOrder": "sequence", // Run tasks in sequence
+		"dependsOn": ["lint", "build"], // List of tasks to run
+		"group": {
+		  "kind": "build",
+		  "isDefault": true // Set this as the default build task
+		}
+	  }
+	]
+  }

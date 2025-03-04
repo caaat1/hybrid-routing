@@ -18,7 +18,12 @@ const eslintConfig = [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.json', // Enables type-aware linting
+        project: ['./tsconfig.json', './tsconfig.views.json'], // Include both tsconfigs
+        // tsconfigRootDir: import.meta.dirname, // Resolve the root directory for tsconfig
+        // createDefaultProgram: true, // Enable type information
+        // ecmaFeatures: {
+        //   jsx: true,
+        // },
       },
     },
     plugins: {

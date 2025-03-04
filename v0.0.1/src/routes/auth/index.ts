@@ -4,7 +4,7 @@ import {Router} from 'express'
 import type {Request, Response} from 'express'
 
 import authenticate from '../../services/auth/mongoDB/index.js'
-import type {LoginRequestBody} from '../../types/RequestBody' // import your interface
+import type {LoginRequestBody} from '../../type/RequestBody.js' // import your interface
 
 declare module 'express-session' {
   interface SessionData {

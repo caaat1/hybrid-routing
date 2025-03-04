@@ -2,17 +2,40 @@
 	"version": "2.0.0",
 	"tasks": [
 	  {
-		"label": "eslint: lint src folder",
+		"label": "lint",
 		"type": "shell",
-		"command": "npx eslint src --fix", // Lint only the src folder
+		"command": "npm run lint",
 		"problemMatcher": ["$eslint-stylish"],
 		"group": {
 		  "kind": "build",
-		  "isDefault": true
+		  "isDefault": false
 		},
 		"options": {
-		  "cwd": "${workspaceFolder}" // Ensure the command runs in the workspace root
+		  "cwd": "${workspaceFolder}"
+		}
+	  },
+	  {
+		"label": "build",
+		"type": "shell",
+		"command": "npm run build",
+		"problemMatcher": [],
+		"group": {
+		  "kind": "build",
+		  "isDefault": false
+		},
+		"options": {
+		  "cwd": "${workspaceFolder}"
+		}
+	  },
+	  {
+		"label": "lint-and-build",
+		"dependsOrder": "sequence",
+		"dependsOn": ["lint", "build"],
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
 		}
 	  }
 	]
   }
+  
