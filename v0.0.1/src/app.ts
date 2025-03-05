@@ -1,3 +1,4 @@
+import {createRequire} from 'module'
 import path from 'path'
 import {fileURLToPath} from 'url'
 
@@ -13,6 +14,11 @@ import adminRouter from './routes/admin/index.js'
 import authRouter from './routes/auth/index.js'
 import indexRouter from './routes/index.js'
 
+const require = createRequire(import.meta.url)
+console.log(require.resolve('@/routes/admin/index.js'))
+
+const resolvedPath = import.meta.resolve('@/routes/admin/index.js')
+console.log(resolvedPath)
 // Load environment variables from .env file
 dotenv.config()
 
@@ -60,10 +66,10 @@ function sessionMiddleware(sessionOptions = {}): express.RequestHandler {
     SECONDS_IN_A_MINUTE *
     MILLISECONDS_IN_A_SECOND
   const defaultOptions = {
-    secret: process.env.SESSION_SECRET ?? 'default_secret',
+    secret: process.env['SESSION_SECRET'] ?? 'default_secret',
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
+    store: MongoStore.create({mongoUrl: process.env['MONGO_URI']}),
     cookie: {maxAge: ONE_DAY_IN_MS}, // 1 day
   }
   return session({...defaultOptions, ...sessionOptions})

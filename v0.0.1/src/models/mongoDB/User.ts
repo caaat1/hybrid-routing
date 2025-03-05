@@ -29,7 +29,7 @@ userSchema.pre<IUser>('save', async function (next) {
 })
 
 // Method to compare passwords
-userSchema.methods.comparePassword = async function (
+userSchema.methods['comparePassword'] = async function (
   this: IUser,
   password: string,
 ): Promise<boolean> {

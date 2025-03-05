@@ -48,7 +48,7 @@ function handleNewProduct(_: Request, res: Response): void {
 
 async function handleEditProduct(req: Request, res: Response): Promise<void> {
   try {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(req.params['id'])
     res.render('admin/edit-product', {product})
   } catch (err) {
     console.error(err)

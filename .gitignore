@@ -3,5 +3,10 @@ dist/
 .env
 public/
 v0.0.1 - Copy*
+*\ copy
 *.tsbuildinfo
 *.log
+*.log.*
+*.log-*
+*.log/*
+*.log~*

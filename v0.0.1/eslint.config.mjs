@@ -16,14 +16,14 @@ const eslintConfig = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: ['./tsconfig.json', './tsconfig.views.json'], // Include both tsconfigs
-        // tsconfigRootDir: import.meta.dirname, // Resolve the root directory for tsconfig
         // createDefaultProgram: true, // Enable type information
         // ecmaFeatures: {
         //   jsx: true,
         // },
+        ecmaVersion: 'latest',
+        project: ['./tsconfig.json', './tsconfig.views.json'], // Include both tsconfigs
+        sourceType: 'module',
+        // tsconfigRootDir: import.meta.dirname, // Resolve the root directory for tsconfig
       },
     },
     plugins: {
@@ -34,21 +34,21 @@ const eslintConfig = [
       ...ts.configs['recommended-requiring-type-checking'].rules,
       '@typescript-eslint/array-type': ['error', {default: 'array-simple'}],
       '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
-      '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/explicit-module-boundary-types': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        {checksVoidReturn: true},
-      ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-confusing-void-expression': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-for-in-array': 'error',
       '@typescript-eslint/no-magic-numbers': [
         'warn',
         {ignore: [-1, 0, 1], ignoreArrayIndexes: true, enforceConst: true},
+      ],
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {checksVoidReturn: true},
       ],
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-unnecessary-type-assertion': 'error',
