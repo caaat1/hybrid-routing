@@ -81,6 +81,7 @@ const eslintConfig = [
       import: importPlugin,
     },
     rules: {
+      'import/newline-after-import': ['error', {count: 1}], // Enforces an empty line after imports
       'import/extensions': [
         'error',
         'ignorePackages',
@@ -163,6 +164,7 @@ const eslintConfig = [
       'no-implied-eval': 'error',
       'no-lonely-if': 'error',
       'no-multi-spaces': 'error',
+      'no-multiple-empty-lines': ['error', {max: 1}],
       'no-nested-ternary': 'error',
       'no-new-func': 'error',
       'no-new-wrappers': 'error',

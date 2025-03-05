@@ -4,7 +4,7 @@
 	  {
 		"label": "lint",
 		"type": "shell",
-		"command": "npm run lint",
+		"command": "./sh/clear-and-run-lint.sh",
 		"problemMatcher": ["$eslint-stylish"],
 		"group": {
 		  "kind": "build",
