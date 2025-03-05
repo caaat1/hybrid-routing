@@ -182,7 +182,7 @@ const eslintConfig = [
       curly: ['error', 'all'],
       eqeqeq: ['error', 'always'],
       radix: ['error', 'as-needed'],
-      yoda: ['error', 'never'],
+      yoda: ['error', 'never', {exceptRange: true}],
     },
   },
 ]

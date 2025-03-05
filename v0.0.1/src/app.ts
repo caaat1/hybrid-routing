@@ -68,7 +68,7 @@ function sessionMiddleware(sessionOptions = {}): express.RequestHandler {
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: process.env['MONGO_URI'] ?? 'mongodb://localhost:27017/default',
+      mongoUrl: process.env['MONGO_URI'] ?? 'mongodb://localhost:27017/default', // DEV: throw an error if not set
     }),
     cookie: {maxAge: ONE_DAY_IN_MS}, // 1 day
   }

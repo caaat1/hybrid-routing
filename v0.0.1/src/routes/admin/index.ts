@@ -7,11 +7,11 @@ import isAuthenticated from '../../middleware/auth/index.js'
 import Product from '../../models/mongoDB/Product.js'
 
 const SERVER_ERROR_STATUS = 500
-function handleAdminDashboard(_: Request, res: Response): void {
+function handleAdminDashboard(_req: Request, res: Response): void {
   res.render('admin', {title: 'Admin Dashboard'})
 }
 
-async function handleGetProducts(_: Request, res: Response): Promise<void> {
+async function handleGetProducts(_req: Request, res: Response): Promise<void> {
   try {
     const products = await Product.find()
     res.render('admin/products', {products})
@@ -42,7 +42,7 @@ async function handleCreateProduct(
   }
 }
 
-function handleNewProduct(_: Request, res: Response): void {
+function handleNewProduct(_req: Request, res: Response): void {
   res.render('admin/new-product')
 }
 

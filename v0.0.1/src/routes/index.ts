@@ -2,23 +2,17 @@
 
 import {Router} from 'express'
 import type {Request, Response} from 'express'
-import {DOMImplementation, XMLSerializer} from 'xmldom'
+// import {DOMImplementation, XMLSerializer} from 'xmldom'
+
+// import type Document from '../DOM/Node/Document/index.js'
+import View from '../view/index.js'
 
 function renderHome(_req: Request, res: Response): void {
-  const imp: DOMImplementation = new DOMImplementation()
-  const doctype = imp.createDocumentType('html', '', '') // Equivalent to <!DOCTYPE html>
-  const document: Document = imp.createDocument(null, 'html', doctype)
+  const view = new View()
+  // const view: Document = View.create()
+  res.send(view.toString())
 
-  // Add a child element to the <html> element to prevent self-closing
-  const html = document.documentElement
-  const body = document.createElement('body')
-  html.appendChild(body) // Adding a body tag inside <html>
-  body.textContent = ' '
-
-  // Serialize the document to string
-  console.log(new XMLSerializer().serializeToString(document))
-
-  res.send(new XMLSerializer().serializeToString(document))
+  // res.send(new XMLSerializer().serializeToString(document))
   // res.render('index', {title: 'Home'})
 }
 
