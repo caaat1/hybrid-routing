@@ -16,14 +16,13 @@ const eslintConfig = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        // createDefaultProgram: true, // Enable type information
-        // ecmaFeatures: {
-        //   jsx: true,
-        // },
         ecmaVersion: 'latest',
-        project: ['./tsconfig.json', './tsconfig.views.json'], // Include both tsconfigs
+        project: ['./tsconfig.json', './tsconfig.views.json'],
         sourceType: 'module',
-        // tsconfigRootDir: import.meta.dirname, // Resolve the root directory for tsconfig
+        ecmaFeatures: {
+          jsx: true,
+        },
+        createDefaultProgram: true, // Enable type-checking
       },
     },
     plugins: {
@@ -57,6 +56,8 @@ const eslintConfig = [
       '@typescript-eslint/no-unsafe-call': 'error',
       '@typescript-eslint/no-unsafe-member-access': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
@@ -65,8 +66,13 @@ const eslintConfig = [
           ignoreRestSiblings: true,
         },
       ],
+      '@typescript-eslint/prefer-includes': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      // '@typescript-eslint/prefer-readonly-parameter-types': 'warn',
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/prefer-regexp-exec': 'error',
+      '@typescript-eslint/prefer-string-starts-ends-with': 'error',
       '@typescript-eslint/require-await': 'error',
       '@typescript-eslint/restrict-template-expressions': 'error',
       '@typescript-eslint/strict-boolean-expressions': 'error',
@@ -81,7 +87,7 @@ const eslintConfig = [
       import: importPlugin,
     },
     rules: {
-      'import/newline-after-import': ['error', {count: 1}], // Enforces an empty line after imports
+      'import/newline-after-import': ['error', {count: 1}],
       'import/extensions': [
         'error',
         'ignorePackages',
@@ -97,10 +103,7 @@ const eslintConfig = [
       'import/order': [
         'error',
         {
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
+          alphabetize: {order: 'asc', caseInsensitive: true},
           groups: [
             'builtin',
             'external',
@@ -113,7 +116,8 @@ const eslintConfig = [
         },
       ],
       'import/no-anonymous-default-export': 'error',
-      // 'import/no-default-export': 'error',
+      'import/no-duplicates': 'error', // Prevent duplicate imports
+      'import/no-named-as-default': 'error', // Avoid importing default named exports
       'import/no-deprecated': 'warn',
       'import/no-unused-modules': 'error',
     },
@@ -146,17 +150,12 @@ const eslintConfig = [
       },
     },
     rules: {
-      // 'array-bracket-spacing': ['error', 'never'],
       'arrow-body-style': ['error', 'as-needed'],
-      // 'comma-dangle': ['error', 'always-multiline'],
       'consistent-return': 'error',
-      'default-case': 'error',
       'linebreak-style': ['error', 'unix'],
       'no-array-constructor': 'error',
       'no-bitwise': 'error',
-      // 'no-console': ['warn', {allow: ['warn', 'error']}],
       'no-constant-condition': 'error',
-      'no-continue': 'error',
       'no-empty': ['error', {allowEmptyCatch: true}],
       'no-eval': 'error',
       'no-implicit-coercion': 'error',
@@ -172,20 +171,17 @@ const eslintConfig = [
       'no-return-await': 'error',
       'no-script-url': 'error',
       'no-throw-literal': 'error',
-      'no-unexpected-multiline': 'error', // Catch edge cases with multiline statements
+      'no-unexpected-multiline': 'error',
       'no-unreachable': 'error',
       'no-unsafe-finally': 'error',
       'no-unused-expressions': 'error',
       'no-use-before-define': ['error', {functions: false, classes: true}],
       'no-var': 'error',
-      // 'object-curly-spacing': ['error', 'always'],
       'prefer-const': 'error',
       'prefer-template': 'error',
       curly: ['error', 'all'],
-      eqeqeq: ['error', 'always'], // {null: 'never'}
-      // quotes: ['error', 'single', {avoidEscape: true}],
+      eqeqeq: ['error', 'always'],
       radix: ['error', 'as-needed'],
-      // semi: ['error', 'never'],
       yoda: ['error', 'never'],
     },
   },
