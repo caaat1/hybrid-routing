@@ -17,8 +17,6 @@ import indexRouter from './routes/index.js'
 const require = createRequire(import.meta.url)
 console.log(require.resolve('@/routes/admin/index.js'))
 
-const resolvedPath = import.meta.resolve('@/routes/admin/index.js')
-console.log(resolvedPath)
 // Load environment variables from .env file
 dotenv.config()
 
@@ -69,7 +67,9 @@ function sessionMiddleware(sessionOptions = {}): express.RequestHandler {
     secret: process.env['SESSION_SECRET'] ?? 'default_secret',
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({mongoUrl: process.env['MONGO_URI']}),
+    store: MongoStore.create({
+      mongoUrl: process.env['MONGO_URI'] ?? 'mongodb://localhost:27017/default',
+    }),
     cookie: {maxAge: ONE_DAY_IN_MS}, // 1 day
   }
   return session({...defaultOptions, ...sessionOptions})
