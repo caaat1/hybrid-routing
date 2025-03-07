@@ -8,32 +8,5 @@
     }
   },
   "cSpell.ignoreWords": [],
-  "cSpell.words": [
-    "Grabbable",
-    "kgolov",
-    "mapbox",
-    "safehandler",
-    "sortkeybindings",
-    "Zerkalny"
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
-  },
-  "eslint.enable": true,
-  "eslint.lintTask.enable": true,
-  "eslint.lintTask.options": ".", // Lint all files in the workspace
-  "eslint.probe": [
-    "javascript",
-    "typescript"
-  ], // Ensure ESLint works for JS/TS files
-  "eslint.run": "onType", // Lint as you type
-  "eslint.validate": [
-    "javascript",
-    "typescript",
-    "javascriptreact",
-    "typescriptreact"
-  ],
-  "typescript.format.semicolons": "remove",
-  "typescript.preferences.importModuleSpecifierEnding": "js",
-  "typescript.preferences.quoteStyle": "single"
+  "cSpell.words": [],
 }
