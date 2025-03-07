@@ -1,4 +1,10 @@
 {
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode"
+    ]
+  },
   "folders": [
     {
       "path": "./v0.0.1"
@@ -6,6 +12,7 @@
   ],
   "settings": {
     "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
     "peacock.color": "#42b883",
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#65c89b",

@@ -1,12 +1,24 @@
 {
-  "dictionaries": [],
-  "dictionaryDefinitions": [],
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "allowCompoundWords": true,
+  "dictionaries": [
+    "custom-words"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "addWords": true,
+      "name": "custom-words",
+      "path": "./custom-words.txt"
+    }
+  ],
   "ignorePaths": [
     "node_modules/**",
     "dist/**",
     "build/**",
     ".git/**",
-    "public/**"
+    "public/**",
+    "**/*/custom-words.txt",
+    "**/*/custom-dictionary-folder.txt"
   ],
   "ignoreWords": [],
   "import": [],
