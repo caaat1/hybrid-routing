@@ -27,16 +27,22 @@ const __dirname = path.dirname(__filename)
 // Initialize Express app
 const app = express()
 
-// Configure view engine
 // TODO: consider chaining the method calls
-// TODO: consider using the `set` method to set multiple values at once
+// TODO: consider using the `set` method to set multiple values at once (AI suggestion)
 // TODO: consider moving all string literals to constants
-// TODO: consider using path.resolve method to resolve the path
-// TODO: success in attempts of implementing tsconfig paths
-// TODO: experiment with removing .ejs extension from view files
-// TODO: try implementing a no empty lime except in import block rule
+// TODO: consider using path.resolve method to resolve the path (AI suggestion)
+// TODO: succeed in attempts of implementing tsconfig paths
+// TODO: try implementing a no-empty-line-except-in-import-block rule
 // TODO: continue perfecting the eslint configuration
 // TODO: revise all error handling in the project
+// TODO: refactor filename/dirname block
+// TODO: Move route handlers to separate files
+// TODO: move all named files to FolderName/index.ts where possible
+// TODO: cast all routes to the view paths
+// TODO: inquire about controllers
+// TODO: move all routes to separate files
+
+// Configure view engine
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../src/views'))
 
