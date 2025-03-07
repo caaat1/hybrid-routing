@@ -7,17 +7,17 @@
     "paths": {
     //   "@/*": ["src/views/*"]
     },                                                   /* Specify a set of entries that re-map imports to additional lookup locations. */
-    "rootDir": "./src/views",                            /* Specify the root folder within your source files. */
+    "rootDir": "./",                                 /* Specify the root folder within your source files. */
 
     /* Emit */
 
-    "outDir": "./public/",                               /* Specify an output folder for all emitted files. */
+    "outDir": "../../public/",                           /* Specify an output folder for all emitted files. */
    },
     "exclude": [
     "node_modules",
   ],
-  "extends": "./tsconfig.json",  
+  "extends": "../../tsconfig.json",  
   "include": [
-    "src/views/**/*"
+    "**/*.ts"
   ],
 }

@@ -16,7 +16,7 @@ const eslintConfig = [
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
-        project: ['./tsconfig.json', './tsconfig.views.json'],
+        project: ['./tsconfig.json', './src/views/tsconfig.json'],
         sourceType: 'module',
         ecmaFeatures: {
           jsx: true,

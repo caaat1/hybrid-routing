@@ -32,6 +32,11 @@ const app = express()
 // TODO: consider using the `set` method to set multiple values at once
 // TODO: consider moving all string literals to constants
 // TODO: consider using path.resolve method to resolve the path
+// TODO: success in attempts of implementing tsconfig paths
+// TODO: experiment with removing .ejs extension from view files
+// TODO: try implementing a no empty lime except in import block rule
+// TODO: continue perfecting the eslint configuration
+// TODO: revise all error handling in the project
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../src/views'))
 
@@ -72,7 +77,7 @@ function sessionMiddleware(sessionOptions = {}): express.RequestHandler {
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: process.env['MONGO_URI'] ?? 'mongodb://localhost:27017/default', // DEV: throw an error if not set
+      mongoUrl: process.env['MONGO_URI'] ?? 'mongodb://localhost:27017/default', // TODO: throw an error if not set
     }),
     cookie: {maxAge: ONE_DAY_IN_MS}, // 1 day
   }
