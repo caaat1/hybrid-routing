@@ -43,13 +43,13 @@ async function handleCreateProduct(
 }
 
 function handleNewProduct(_req: Request, res: Response): void {
-  res.render('admin/new-product')
+  res.render('admin/products/product/new')
 }
 
 async function handleEditProduct(req: Request, res: Response): Promise<void> {
   try {
     const product = await Product.findById(req.params['id'])
-    res.render('admin/edit-product', {product})
+    res.render('admin/products/product/edit', {product})
   } catch (err) {
     console.error(err)
     res.status(SERVER_ERROR_STATUS).send('Server Error')

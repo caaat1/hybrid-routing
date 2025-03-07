@@ -28,6 +28,10 @@ const __dirname = path.dirname(__filename)
 const app = express()
 
 // Configure view engine
+// TODO: consider chaining the method calls
+// TODO: consider using the `set` method to set multiple values at once
+// TODO: consider moving all string literals to constants
+// TODO: consider using path.resolve method to resolve the path
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../src/views'))
 

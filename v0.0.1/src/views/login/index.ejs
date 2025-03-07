@@ -1,4 +1,4 @@
-<!-- src\views\login.ejs -->
+<!-- src\views\login\index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/login/styles.css">
 </head>
 <body>
-    <%- include('../+/partials/header'); %>
+    <%- include('../+/partials/header/index.ejs'); %>
     <main>
         <h1>Login</h1>
         <% if (typeof error !== 'undefined') { %>
@@ -22,6 +22,6 @@
             <button type="submit">Login</button>
         </form>
     </main>
-    <script src="/index.js"></script>
+    <script src="/login/+/script/index.js"></script>
 </body>
 </html>

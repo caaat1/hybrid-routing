@@ -9,7 +9,6 @@ import globals from 'globals'
 const eslintConfig = [
   // Base JavaScript rules
   js.configs.recommended,
-
   // TypeScript rules with type information enabled
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -80,7 +79,6 @@ const eslintConfig = [
       '@typescript-eslint/unbound-method': 'error',
     },
   },
-
   // Import sorting and organization
   {
     plugins: {
@@ -120,6 +118,10 @@ const eslintConfig = [
       'import/no-named-as-default': 'error', // Avoid importing default named exports
       'import/no-deprecated': 'warn',
       'import/no-unused-modules': 'error',
+      // 'padding-line-between-statements': [
+      //   'error',
+      //   {blankLine: 'always', prev: 'import', next: '*'},
+      // ],
     },
     settings: {
       'import/resolver': {
@@ -129,7 +131,6 @@ const eslintConfig = [
       },
     },
   },
-
   // Prettier integration
   {
     plugins: {
@@ -140,7 +141,6 @@ const eslintConfig = [
       'prettier/prettier': 'error',
     },
   },
-
   // Additional project-specific rules
   {
     languageOptions: {
@@ -163,7 +163,7 @@ const eslintConfig = [
       'no-implied-eval': 'error',
       'no-lonely-if': 'error',
       'no-multi-spaces': 'error',
-      'no-multiple-empty-lines': ['error', {max: 1}],
+      // 'no-multiple-empty-lines': ['error', {max: 0, maxBOF: 0, maxEOF: 0}],
       'no-nested-ternary': 'error',
       'no-new-func': 'error',
       'no-new-wrappers': 'error',
@@ -186,5 +186,4 @@ const eslintConfig = [
     },
   },
 ]
-
 export default eslintConfig
