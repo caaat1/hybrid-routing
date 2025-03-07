@@ -33,10 +33,6 @@
     "javascriptreact",
     "typescriptreact"
   ],
-  "files.exclude": {
-    "**/.git": false
-  },
-  "terminal.integrated.cwd": "${fileDirname}",
   "typescript.format.semicolons": "remove",
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "typescript.preferences.quoteStyle": "single"
