@@ -1,20 +1,21 @@
 // src/routes/index.ts
 
-import {exec} from 'child_process'
-import path from 'path'
-import {fileURLToPath} from 'url'
+// import {exec} from 'child_process'
+// import path from 'path'
+// import {fileURLToPath} from 'url'
 
 import {Router} from 'express'
 import type {Request, Response} from 'express'
 
+// import View from '../protoDOM/index.js'
+
 // import View from '../view/index.js'
 
 function renderHome(_req: Request, res: Response): void {
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = path.dirname(__filename)
+  // const __filename = fileURLToPath(import.meta.url)
+  // const __dirname = path.dirname(__filename)
 
-  const scriptPath = path.resolve(__dirname, '../../../PHP/index.php')
-  console.log(scriptPath)
+  // const scriptPath = path.resolve(__dirname, '../../../PHP/index.php')
   // exec(`php ${scriptPath}`, (error, stdout, stderr) => {
   //   if (error) {
   //     console.error(`Error: ${error.message}`)
@@ -29,9 +30,12 @@ function renderHome(_req: Request, res: Response): void {
   //   res.send(result)
   // })
 
+  res.render('.')
+
   // res.render('.', {title: 'Home'})
 
-  // const view = View.create()
+  // const view = View.create().toString()
+  // res.send(view)
 }
 
 function renderAbout(_req: Request, res: Response): void {

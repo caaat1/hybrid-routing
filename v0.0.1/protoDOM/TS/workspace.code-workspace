@@ -1,0 +1,44 @@
+{
+  "extensions": {
+    "recommendations": []
+  },
+  "folders": [
+    {
+      "path": "./"
+    },
+  ],
+  "settings": {
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "peacock.color": "#7db842",
+    "workbench.colorCustomizations": {
+      "editorGroupHeader.border": "#00ff00ff",
+      "editorGroupHeader.tabsBackground": "#333333ff",
+      "editorGroupHeader.tabsBorder": "#0f6c8cff",
+      "folderPathColor.custom1": "#e9aad5ff",
+      "folderPathColor.custom2": "#c682b2ff",
+      "folderPathColor.custom3": "#89af72ff",
+      "folderPathColor.custom4": "#7b9ad0ff",
+      "tab.activeBackground": "#00ff0055",
+      "tab.inactiveBackground": "#333333ff",
+      "tab.unfocusedActiveBackground": "#004400ff",
+      "activityBar.activeBackground": "#96c865",
+      "activityBar.background": "#96c865",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#437fbc",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "commandCenter.border": "#15202b99",
+      "sash.hoverBorder": "#96c865",
+      "statusBar.background": "#7db842",
+      "statusBar.foreground": "#15202b",
+      "statusBarItem.hoverBackground": "#639235",
+      "statusBarItem.remoteBackground": "#7db842",
+      "statusBarItem.remoteForeground": "#15202b",
+      "titleBar.activeBackground": "#7db842",
+      "titleBar.activeForeground": "#15202b",
+      "titleBar.inactiveBackground": "#7db84299",
+      "titleBar.inactiveForeground": "#15202b99"
+    }
+  }
+}
