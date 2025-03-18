@@ -56,7 +56,7 @@ app.use(express.json()) // For parsing JSON request bodies
 app.use(sessionMiddleware())
 
 // Initial router handler
-const router = new Router()
+const router = new Router(app)
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   router.handleRequest(req, res, next)
 })
