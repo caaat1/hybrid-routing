@@ -11,7 +11,8 @@ import express from 'express'
 import type {Request, Response, NextFunction} from 'express'
 import session from 'express-session'
 
-import Router from './Router/index.js'
+import Initial from './RequestHandler/Initial/index.js'
+import Next from './RequestHandler/Next/index.js'
 
 // const require = createRequire(import.meta.url)
 // console.log(require.resolve('@/routes/admin/index.js'))
@@ -35,11 +36,9 @@ const app = express()
 // TODO: continue perfecting the eslint configuration
 // TODO: revise all error handling in the project
 // TODO: refactor filename/dirname block
-// TODO: Move route handlers to separate files
 // TODO: move all named files to FolderName/index.ts where possible
 // TODO: cast all routes to the view paths
 // TODO: inquire about controllers
-// TODO: move all routes to separate files
 
 // Configure view engine
 app.set('view engine', 'ejs')
@@ -55,12 +54,85 @@ app.use(express.json()) // For parsing JSON request bodies
 // Session middleware
 app.use(sessionMiddleware())
 
-// Initial router handler
-const router = new Router(app)
-app.get('*', (req: Request, res: Response, next: NextFunction) => {
-  router.handleRequest(req, res, next)
+// Unified request handling
+const initialHandler = new Initial(app)
+const nextHandler = new Next(app)
+
+// app.get('*', (req: Request, res: Response, next: NextFunction) => {
+//   // Serve the client-side renderer for initial requests
+//   if (isInitialRequest(req)) {
+//     initialHandler.handle(req, res, next)
+//   } else {
+//     // Delegate proto-DOM requests to the router
+//     nextHandler.handle(req, res, next)
+//   }
+// })
+// // Named function to determine if request is an initial load
+// function isInitialRequest(req: Request): boolean {
+//   // Check if the request is for a proto-DOM path or static asset
+//   const staticExtensions = [
+//     '.js',
+//     '.css',
+//     '.png',
+//     '.jpg',
+//     '.gif',
+//     '.svg',
+//     '.ico',
+//   ]
+//   const requestPath = req.path
+
+//   // If path matches a static resource, it's not an initial request
+//   if (staticExtensions.some((ext) => requestPath.endsWith(ext))) {
+//     return false
+//   }
+
+//   // If the path starts with "/view/", it's a proto-DOM request
+//   if (requestPath.startsWith('/view/')) {
+//     return false
+//   }
+
+//   // Otherwise, treat it as an initial page load
+//   return true
+// }
+app.get('*', async (req: Request, res: Response, next: NextFunction) => {
+  const viewDirectory = path.join(app.get('view'), req.path)
+
+  // Check if a view exists
+  if (await isDirectory(viewDirectory)) {
+    const protoDomPath = path.join(viewDirectory, 'proto-dom.json')
+    if (await fileExists(protoDomPath)) {
+      const protoDom = require(protoDomPath)
+      res.json(protoDom) // Serve the proto-DOM
+      return
+    }
+  }
+
+  // Fallback to static file
+  const staticFilePath = path.join(__dirname, '../public', req.path)
+  if (await fileExists(staticFilePath)) {
+    res.sendFile(staticFilePath) // Serve static file
+    return
+  }
+
+  // Serve 404 for unmatched requests
+  res.status(404).send('Resource not found')
 })
 
+function isDirectory(directoryPath: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    fs.stat(directoryPath, (err, stats) => {
+      resolve(!err && stats.isDirectory())
+    })
+  })
+}
+
+function fileExists(filePath: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      resolve(!err)
+    })
+  })
+}
 // Export Express app
 export default app
 

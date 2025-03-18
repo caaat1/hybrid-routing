@@ -44,7 +44,4 @@ export default class Next extends RequestHandler {
       }
     })
   }
-  public override getNextHandler(): RequestHandler {
-    return this
-  }
 }
