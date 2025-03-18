@@ -54,7 +54,7 @@
   "scripts": {
     "-start": "node -r tsconfig-paths/register ./server.js",
     "build": "npm-run-all clean build:tsc",
-    "build:tsc": "tsc --project tsconfig.json && tsc --project ./src/views/tsconfig.json",
+    "build:tsc": "tsc --project tsconfig.json && tsc --project ./src/view/tsconfig.json",
     "clean": "del-cli ./dist --force",
     "lint": "cls eslint src --fix",
     "start": "nodemon",

@@ -1,21 +1,20 @@
-import {createRequire} from 'module'
+// src/app.ts
+
+// import {createRequire} from 'module'
 import path from 'path'
 import {fileURLToPath} from 'url'
 
 import bodyParser from 'body-parser'
 import MongoStore from 'connect-mongo'
-import debug from 'debug'
 import dotenv from 'dotenv'
 import express from 'express'
-import type {Request, Response} from 'express'
+import type {Request, Response, NextFunction} from 'express'
 import session from 'express-session'
 
-import adminRouter from './routes/admin/index.js'
-import authRouter from './routes/auth/index.js'
-import indexRouter from './routes/index.js'
+import Router from './Router/index.js'
 
-const require = createRequire(import.meta.url)
-console.log(require.resolve('@/routes/admin/index.js'))
+// const require = createRequire(import.meta.url)
+// console.log(require.resolve('@/routes/admin/index.js'))
 
 // Load environment variables from .env file
 dotenv.config()
@@ -44,7 +43,7 @@ const app = express()
 
 // Configure view engine
 app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, '../src/views'))
+app.set('views', path.join(__dirname, '../src/view'))
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public')))
@@ -56,13 +55,11 @@ app.use(express.json()) // For parsing JSON request bodies
 // Session middleware
 app.use(sessionMiddleware())
 
-// Setup routes
-app.use('/', indexRouter)
-app.use('/', authRouter)
-app.use('/admin', adminRouter)
-
-// 404 handler
-app.use(handle404)
+// Initial router handler
+const router = new Router()
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+  router.handleRequest(req, res, next)
+})
 
 // Export Express app
 export default app
@@ -88,16 +85,4 @@ function sessionMiddleware(sessionOptions = {}): express.RequestHandler {
     cookie: {maxAge: ONE_DAY_IN_MS}, // 1 day
   }
   return session({...defaultOptions, ...sessionOptions})
-}
-
-// Named function for 404 handler
-function handle404(req: Request, res: Response): void {
-  const log404 = debug('app:404')
-  log404(`404 - ${req.originalUrl} not found`)
-
-  const HTTP_STATUS_NOT_FOUND = 404
-  res.status(HTTP_STATUS_NOT_FOUND).render('404', {
-    title: 'Page Not Found',
-    message: `The requested URL ${req.originalUrl} was not found on this server.`,
-  })
 }

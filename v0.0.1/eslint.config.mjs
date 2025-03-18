@@ -7,6 +7,10 @@ import prettierPlugin from 'eslint-plugin-prettier'
 import globals from 'globals'
 
 const eslintConfig = [
+  // Ignore patterns
+  {
+    ignores: ['**/-*'], // Exclude files and folders starting with a dash
+  },
   // Base JavaScript rules
   js.configs.recommended,
   // TypeScript rules with type information enabled
@@ -15,13 +19,13 @@ const eslintConfig = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        project: ['./tsconfig.json', './src/views/tsconfig.json'],
-        sourceType: 'module',
+        createDefaultProgram: true, // Enable type-checking
         ecmaFeatures: {
           jsx: true,
         },
-        createDefaultProgram: true, // Enable type-checking
+        ecmaVersion: 'latest',
+        project: ['./tsconfig.json', './src/view/tsconfig.json'],
+        sourceType: 'module',
       },
     },
     plugins: {
@@ -49,14 +53,14 @@ const eslintConfig = [
         {checksVoidReturn: true},
       ],
       '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-unnecessary-type-assertion': 'error',
       '@typescript-eslint/no-unsafe-argument': 'error',
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-unsafe-call': 'error',
       '@typescript-eslint/no-unsafe-member-access': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
-      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
-      '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {

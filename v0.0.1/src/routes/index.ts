@@ -1,45 +1,27 @@
 // src/routes/index.ts
 
-// import {exec} from 'child_process'
-// import path from 'path'
-// import {fileURLToPath} from 'url'
-
 import {Router} from 'express'
 import type {Request, Response} from 'express'
 
-// import View from '../protoDOM/index.js'
+// function renderHome(_req: Request, res: Response): void {
+//   res.render('.')
+// }
 
-// import View from '../view/index.js'
+// function renderAbout(_req: Request, res: Response): void {
+//   res.render('about', {title: 'About'})
+// }
 
-function renderHome(_req: Request, res: Response): void {
-  // const __filename = fileURLToPath(import.meta.url)
-  // const __dirname = path.dirname(__filename)
+// export default Router().get('/', renderHome).get('/about', renderAbout)
 
-  // const scriptPath = path.resolve(__dirname, '../../../PHP/index.php')
-  // exec(`php ${scriptPath}`, (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error(`Error: ${error.message}`)
-  //     return
-  //   }
-  //   if (stderr) {
-  //     console.error(`Stderr: ${stderr}`)
-  //     return
-  //   }
-  //   const result: unknown = JSON.parse(stdout)
-  //   console.log(result)
-  //   res.send(result)
-  // })
+// Create router instance
+const router = Router()
 
-  res.render('.')
+// Catch-all route (must be at the end)
+router.get('*', (req: Request, res: Response) => {
+  console.log(req.originalUrl) // Full URL path
+  console.log(req.path) // Only the path (no query string)
+  console.log(req.query) // Parsed query parameters (as an object)
+  res.render('router', {dataUrl: req.originalUrl}) // Serves 'index.ejs' (or another page) for all other routes
+})
 
-  // res.render('.', {title: 'Home'})
-
-  // const view = View.create().toString()
-  // res.send(view)
-}
-
-function renderAbout(_req: Request, res: Response): void {
-  res.render('about', {title: 'About'})
-}
-
-export default Router().get('/', renderHome).get('/about', renderAbout)
+export default router

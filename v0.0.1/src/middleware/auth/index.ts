@@ -2,6 +2,11 @@
 
 import type {Request, Response, NextFunction} from 'express'
 
+declare module 'express-session' {
+  interface SessionData {
+    user: unknown
+  }
+}
 export default function isAuthenticated(
   req: Request,
   res: Response,

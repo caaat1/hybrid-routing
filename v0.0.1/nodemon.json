@@ -1,6 +1,12 @@
 {
-  "watch": ["src"],
-  "ext": "js,json",
-  "ignore": ["eslint.config.js", "node_modules/**"],
-  "exec": "node ./server.js"
+  "exec": "node ./server.js",
+  "ext": "js,json,ts",
+  "ignore": [
+    "eslint.config.*",
+    "node_modules/**"
+  ],
+  "watch": [
+    "dist",
+    "src"
+  ]
 }
