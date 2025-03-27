@@ -1,8 +1,9 @@
 // src/app.ts
 
 // import {createRequire} from 'module'
+import fs from 'fs'
 import path from 'path'
-import {fileURLToPath} from 'url'
+import {fileURLToPath, pathToFileURL} from 'url'
 
 import bodyParser from 'body-parser'
 import MongoStore from 'connect-mongo'
@@ -11,8 +12,10 @@ import express from 'express'
 import type {Request, Response, NextFunction} from 'express'
 import session from 'express-session'
 
-import Initial from './RequestHandler/Initial/index.js'
-import Next from './RequestHandler/Next/index.js'
+import DOMDocument from './DOM/Document/index.js'
+
+// import Initial from './RequestHandler/Initial/index.js'
+// import Next from './RequestHandler/Next/index.js'
 
 // const require = createRequire(import.meta.url)
 // console.log(require.resolve('@/routes/admin/index.js'))
@@ -55,8 +58,8 @@ app.use(express.json()) // For parsing JSON request bodies
 app.use(sessionMiddleware())
 
 // Unified request handling
-const initialHandler = new Initial(app)
-const nextHandler = new Next(app)
+// const initialHandler = new Initial(app)
+// const nextHandler = new Next(app)
 
 // app.get('*', (req: Request, res: Response, next: NextFunction) => {
 //   // Serve the client-side renderer for initial requests
@@ -95,27 +98,85 @@ const nextHandler = new Next(app)
 //   return true
 // }
 app.get('*', async (req: Request, res: Response, next: NextFunction) => {
-  const viewDirectory = path.join(app.get('view'), req.path)
+  void next
+  const viewsDirGot: unknown = app.get('views') // Retrieve the value
+  if (typeof viewsDirGot !== 'string') {
+    const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500
+    res
+      .status(HTTP_STATUS_INTERNAL_SERVER_ERROR) // Internal Server Error
+      .send('Views directory is not properly configured.')
+    return
+  }
+  const viewsDir = viewsDirGot
+  const viewPath = path.join(viewsDir, req.path)
+  if (await isDirectory(viewPath)) {
+    const viewIndex = path.join(viewPath, 'index.js')
+    console.log('Full path to view index: ', viewIndex)
 
-  // Check if a view exists
-  if (await isDirectory(viewDirectory)) {
-    const protoDomPath = path.join(viewDirectory, 'proto-dom.json')
-    if (await fileExists(protoDomPath)) {
-      const protoDom = require(protoDomPath)
-      res.json(protoDom) // Serve the proto-DOM
+    async function fileExists(filePath: string): Promise<boolean> {
+      return new Promise((resolve) => {
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          resolve(!err)
+        })
+      })
+    }
+    type ImportClassType = new (...args: unknown[]) => DOMDocument
+
+    if (await fileExists(viewIndex)) {
+      const moduleUrl = pathToFileURL(viewIndex)
+
+      await import(moduleUrl.toString())
+        .then((mod) => {
+          const defaultExport = (mod as {default: unknown}).default
+
+          // Confirm it's a function (which a class constructor would be)
+          if (typeof defaultExport !== 'function') {
+            throw new Error('Default export is not a constructor function.')
+          }
+
+          // Check if it's exactly the expected class or a subclass thereof.
+          if (defaultExport.prototype instanceof DOMDocument) {
+            console.log('The default export is the expected class!')
+            const viewClass: ImportClassType = (
+              mod as {default: ImportClassType}
+            ).default
+            console.log('View class: ', viewClass)
+            console.log('View object: ', new viewClass())
+          } else {
+            throw new Error('Default export is not of the expected class type.')
+          }
+        })
+        .catch((err) => {
+          console.error('Error importing module:', err)
+        })
+
       return
     }
-  }
-
-  // Fallback to static file
-  const staticFilePath = path.join(__dirname, '../public', req.path)
-  if (await fileExists(staticFilePath)) {
-    res.sendFile(staticFilePath) // Serve static file
+    console.log('View index not found')
+    const HTTP_STATUS_NOT_FOUND = 404
+    res.status(HTTP_STATUS_NOT_FOUND).send('View index not found')
     return
   }
 
-  // Serve 404 for unmatched requests
-  res.status(404).send('Resource not found')
+  // // Check if a view exists
+  // if (await isDirectory(viewDirectory)) {
+  //   const protoDomPath = path.join(viewDirectory, 'proto-dom.json')
+  //   if (await fileExists(protoDomPath)) {
+  //     const protoDom = require(protoDomPath)
+  //     res.json(protoDom) // Serve the proto-DOM
+  //     return
+  //   }
+  // }
+
+  // // Fallback to static file
+  // const staticFilePath = path.join(__dirname, '../public', req.path)
+  // if (await fileExists(staticFilePath)) {
+  //   res.sendFile(staticFilePath) // Serve static file
+  //   return
+  // }
+
+  // // Serve 404 for unmatched requests
+  // res.status(404).send('Resource not found')
 })
 
 function isDirectory(directoryPath: string): Promise<boolean> {
@@ -125,15 +186,6 @@ function isDirectory(directoryPath: string): Promise<boolean> {
     })
   })
 }
-
-function fileExists(filePath: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-      resolve(!err)
-    })
-  })
-}
-// Export Express app
 export default app
 
 // Named function for session middleware
