@@ -13,6 +13,8 @@ import type {Request, Response, NextFunction} from 'express'
 import session from 'express-session'
 
 import DOMDocument from './DOM/Document/index.js'
+import Initial from './RequestHandler/Initial/index.js'
+import Next from './RequestHandler/View/index.js'
 
 // import Initial from './RequestHandler/Initial/index.js'
 // import Next from './RequestHandler/Next/index.js'
@@ -35,7 +37,7 @@ const app = express()
 // TODO: consider moving all string literals to constants
 // TODO: consider using path.resolve method to resolve the path (AI suggestion)
 // TODO: succeed in attempts of implementing tsconfig paths
-// TODO: try implementing a no-empty-line-except-in-import-block rule
+// TODO: try implementing a no-empty-line-except-in-import-block rule (made up)
 // TODO: continue perfecting the eslint configuration
 // TODO: revise all error handling in the project
 // TODO: refactor filename/dirname block
@@ -58,18 +60,18 @@ app.use(express.json()) // For parsing JSON request bodies
 app.use(sessionMiddleware())
 
 // Unified request handling
-// const initialHandler = new Initial(app)
-// const nextHandler = new Next(app)
+const initialHandler = new Initial(app)
+const nextHandler = new Next(app)
 
-// app.get('*', (req: Request, res: Response, next: NextFunction) => {
-//   // Serve the client-side renderer for initial requests
-//   if (isInitialRequest(req)) {
-//     initialHandler.handle(req, res, next)
-//   } else {
-//     // Delegate proto-DOM requests to the router
-//     nextHandler.handle(req, res, next)
-//   }
-// })
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+  // Serve the client-side renderer for initial requests
+  if (isInitialRequest(req)) {
+    initialHandler.handle(req, res, next)
+  } else {
+    // Delegate proto-DOM requests to the router
+    nextHandler.handle(req, res, next)
+  }
+})
 // // Named function to determine if request is an initial load
 // function isInitialRequest(req: Request): boolean {
 //   // Check if the request is for a proto-DOM path or static asset
@@ -125,7 +127,7 @@ app.get('*', async (req: Request, res: Response, next: NextFunction) => {
     if (await fileExists(viewIndex)) {
       const moduleUrl = pathToFileURL(viewIndex)
 
-      await import(moduleUrl.toString())
+      await import(moduleUrl.href)
         .then((mod) => {
           const defaultExport = (mod as {default: unknown}).default
 
@@ -142,6 +144,7 @@ app.get('*', async (req: Request, res: Response, next: NextFunction) => {
             ).default
             console.log('View class: ', viewClass)
             console.log('View object: ', new viewClass())
+            res.json(new viewClass()) // Serve the proto-DOM
           } else {
             throw new Error('Default export is not of the expected class type.')
           }
@@ -157,17 +160,6 @@ app.get('*', async (req: Request, res: Response, next: NextFunction) => {
     res.status(HTTP_STATUS_NOT_FOUND).send('View index not found')
     return
   }
-
-  // // Check if a view exists
-  // if (await isDirectory(viewDirectory)) {
-  //   const protoDomPath = path.join(viewDirectory, 'proto-dom.json')
-  //   if (await fileExists(protoDomPath)) {
-  //     const protoDom = require(protoDomPath)
-  //     res.json(protoDom) // Serve the proto-DOM
-  //     return
-  //   }
-  // }
-
   // // Fallback to static file
   // const staticFilePath = path.join(__dirname, '../public', req.path)
   // if (await fileExists(staticFilePath)) {

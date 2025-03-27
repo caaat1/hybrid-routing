@@ -2,7 +2,7 @@ import type {Express, NextFunction, Request, Response} from 'express'
 
 import type RequestHandler from '../RequestHandler/index.js'
 import Initial from '../RequestHandler/Initial/index.js'
-import Next from '../RequestHandler/Next/index.js'
+import Next from '../RequestHandler/View/index.js'
 
 export default class Router {
   private currentHandler: RequestHandler | undefined
@@ -22,4 +22,16 @@ export default class Router {
   private isInitial(req: Request): boolean {
     return req.path === '/'
   }
+  // private getHandlerType(req: Request): string {
+  //   if (this.isInitial(req)) {
+  //     return 'initial'
+  //   }
+  //   if (this.isView(req.path)) {
+  //     return 'view'
+  //   }
+  //   if (this.isStatic(req.path)) {
+  //     return 'static'
+  //   }
+  //   return 'unknown'
+  // }
 }
