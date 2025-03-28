@@ -14,7 +14,7 @@ export default class Router {
       this.currentHandler = new Next(this.app)
     }
     if (this.currentHandler) {
-      this.currentHandler.handle(req, res, next)
+      this.currentHandler.handle(req, res/* , next */)
     } else {
       next(new Error('No handler available'))
     }
