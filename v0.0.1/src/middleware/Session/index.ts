@@ -13,7 +13,7 @@ const ONE_DAY_IN_MS =
   MINUTES_IN_AN_HOUR *
   SECONDS_IN_A_MINUTE *
   MILLISECONDS_IN_A_SECOND
-export class Session {
+export default class Session {
   static create(
     sessionOptions: Partial<session.SessionOptions> = {},
   ): RequestHandler {

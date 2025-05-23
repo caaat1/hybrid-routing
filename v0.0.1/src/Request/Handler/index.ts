@@ -6,4 +6,8 @@ export default abstract class RequestHandler {
     req: Request,
     res: Response /* , next: NextFunction */,
   ): void
+  public abstract isTheCase(
+    req: Request,
+    res: Response,
+  ): Promise<RequestHandler | null>
 }

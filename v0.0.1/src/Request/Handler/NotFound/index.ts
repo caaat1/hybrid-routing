@@ -13,4 +13,12 @@ export default class NotFound extends RequestHandler {
     void res
     console.log('Next router')
   }
+  public override isTheCase(
+    req: Request,
+    res: Response,
+  ): Promise<RequestHandler | null> {
+    void req
+    void res
+    return Promise.resolve(null)
+  }
 }
